@@ -44,7 +44,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         Button btnCancel = (Button) v.findViewById(R.id.cancel_button);
         btnCancel.setOnClickListener(this);
         Button btnExit = (Button) v.findViewById(R.id.exit_button);
-        btnExit.setVisibility(View.GONE);
+        btnExit.setOnClickListener(this);
         return v;
     }
 
