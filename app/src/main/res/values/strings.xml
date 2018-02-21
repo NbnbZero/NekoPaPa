@@ -4,4 +4,9 @@
     <string name="sign_in">Sign in</string>
     <string name="username">Username:</string>
     <string name="password">Password:</string>
+
+    <string name="account">Account</string>
+    <string name="error">Error</string>
+    <string name="passwords_match_error_text">Passwords do not match.</string>
+    <string name="try_again_text">Try Again</string>
 </resources>
