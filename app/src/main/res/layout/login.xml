@@ -11,11 +11,24 @@
         android:padding="24dp"
         android:text="@string/username" />
 
+    <EditText
+        android:layout_width="263dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="24dp"
         android:text="@string/password" />
+
+    <EditText
+        android:layout_width="268dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword" />
 
     <LinearLayout
         android:layout_width="wrap_content"
