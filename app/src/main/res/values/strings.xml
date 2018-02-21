@@ -9,4 +9,12 @@
     <string name="error">Error</string>
     <string name="passwords_match_error_text">Passwords do not match.</string>
     <string name="try_again_text">Try Again</string>
+    <string name="new_account">New Account</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="clear">Clear</string>
+    <string name="create">Create</string>
+    <string name="exit">Exit</string>
+
 </resources>
