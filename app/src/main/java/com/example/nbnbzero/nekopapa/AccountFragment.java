@@ -97,6 +97,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             long result = singleton.addAccount(account);
             if(result >= 0) {
                 toastMessage("New record inserted");
+                getActivity().getSupportFragmentManager().popBackStack();
             }else{
                 accountErrorDialog("Record exists");
             }
