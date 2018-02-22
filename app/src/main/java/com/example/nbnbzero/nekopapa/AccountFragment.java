@@ -89,19 +89,37 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         String username = mEtUsername.getText().toString();
         String password = mEtPassword.getText().toString();
         String confirm = mEtConfirm.getText().toString();
+
+
         if ((password.equals(confirm)) && (!username.equals("")) && (!password.equals("")) && (!confirm.equals(""))) {
             AccountSingleton singleton = AccountSingleton.get(getActivity().getApplicationContext());
             Account account = new Account(username, password);
-            singleton.addAccount(account);
-            Toast.makeText(getActivity().getApplicationContext(), "New record inserted", Toast.LENGTH_SHORT).show();
+            long result = singleton.addAccount(account);
+            if(result >= 0) {
+                toastMessage("New record inserted");
+            }else{
+                accountErrorDialog("Record exists");
+            }
         } else if ((username.equals("")) || (password.equals("")) || (confirm.equals(""))) {
-            Toast.makeText(getActivity().getApplicationContext(), "Missing entry", Toast.LENGTH_SHORT).show();
+            accountErrorDialog("Missing entry");
         } else if (!password.equals(confirm)) {
-            FragmentManager manager = getFragmentManager();
-            AccountErrorDialogFragment fragment = new AccountErrorDialogFragment();
-            fragment.show(manager, "account_error");
+            accountErrorDialog("Password & Confirm Password do not match");
         } else {
             Log.e(TAG, "An unknown account creation error occurred.");
         }
+    }
+
+    private void toastMessage(String msg){
+        Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void accountErrorDialog(String msg){
+        FragmentManager manager = getFragmentManager();
+        AccountErrorDialogFragment fragment = new AccountErrorDialogFragment();
+
+        Bundle args = new Bundle();
+        args.putString("msg", msg);
+        fragment.setArguments(args);
+        fragment.show(manager, "dialog");
     }
 }

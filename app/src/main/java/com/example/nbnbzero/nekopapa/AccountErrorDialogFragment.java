@@ -16,14 +16,16 @@ public class AccountErrorDialogFragment extends DialogFragment {
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Bundle mArgs = getArguments();
         return new AlertDialog.Builder(getActivity())
                 .setTitle(getResources().getString(R.string.error))
-                .setMessage(getResources().getString(R.string.passwords_match_error_text))
+                .setMessage(mArgs.getString("msg"))
                 .setPositiveButton(getResources().getString(R.string.try_again_text),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                             }
                         }).create();
     }
+
 }
 

@@ -31,7 +31,7 @@
         <EditText
             android:id="@+id/username"
             android:hint="@string/enter_username"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:textColorHint="@android:color/darker_gray"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"

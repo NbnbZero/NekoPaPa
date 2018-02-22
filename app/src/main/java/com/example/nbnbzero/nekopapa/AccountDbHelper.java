@@ -12,7 +12,7 @@ import com.example.nbnbzero.nekopapa.AccountDbSchema.AccountsTable;
 public class AccountDbHelper extends SQLiteOpenHelper {
     private Context mContext;
     private static final String DATABASE_NAME = "NekoPaPa.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
 
     // Class name for logging.
     private final String TAG = getClass().getSimpleName();
@@ -25,7 +25,7 @@ public class AccountDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + AccountsTable.NAME + "(" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                AccountsTable.Cols.NAME + " TEXT, " +
+                AccountsTable.Cols.NAME + " TEXT UNIQUE, " +
                 AccountsTable.Cols.PASSWORD + " TEXT" +
                 ")");
     }

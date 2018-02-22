@@ -46,19 +46,37 @@ public class AccountSingleton {
      *
      * @param account
      */
-    public void addAccount(Account account) {
+    public long addAccount(Account account) {
         ContentValues contentValues = getContentValues(account);
+        long result = -1;
 
         mDatabase.beginTransaction();
         try {
+            /*
             SQLiteStatement statement = mDatabase.compileStatement(INSERT_STMT);
             statement.bindString(1, account.getName());
             statement.bindString(2, account.getPassword());
             statement.executeInsert();
+            */
+            ContentValues cv = new ContentValues();
+            result = mDatabase.insert(AccountsTable.NAME, null, contentValues);
+            System.out.println("============================");
+            System.out.println("result = " + result);
+            System.out.println("============================");
             mDatabase.setTransactionSuccessful();
         } finally {
             mDatabase.endTransaction();
         }
+
+        List<Account> accountList = getAccounts();
+        System.out.println("============================");
+        System.out.println("size = " + accountList.size());
+        for (Account acct: accountList) {
+            System.out.println(acct.getName());
+        }
+        System.out.println("============================");
+
+        return result;
     }
 
     /**
