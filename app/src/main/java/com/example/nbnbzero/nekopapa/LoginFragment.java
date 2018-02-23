@@ -70,6 +70,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         Cursor cursor = mDatabase.rawQuery(queryStr, whereArgs);
         if(cursor.getCount() > 0){
             toastMessage("Logged in successfully");
+            getActivity().finish();
+            startActivity(new Intent(getActivity(), GameSessionActivity.class));
         }else{
             toastMessage("User does not exist OR Password is wrong");
         }
