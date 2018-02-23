@@ -16,7 +16,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * Created by NbnbZero on 2/20/2018.
+ * Created by NbnbZero and TeriyakiMayo on 2/20/2018.
+ * Reference: TicTacToe by Professor Adam Champion
+ * Retrieved from: web.cse.ohio-state.edu/~champion.17/5236/TicTacToeNew.zip
  */
 
 public class AccountFragment extends Fragment implements View.OnClickListener {

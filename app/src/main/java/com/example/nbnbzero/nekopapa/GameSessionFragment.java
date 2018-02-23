@@ -6,7 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 /**
- * Created by NbnbZero on 2/22/2018.
+ * Created by NbnbZero and TeriyakiMayo on 2/22/2018.
+ * Reference: TicTacToe by Professor Adam Champion
+ * Retrieved from: web.cse.ohio-state.edu/~champion.17/5236/TicTacToeNew.zip
  */
 
 public class GameSessionFragment extends Fragment {
