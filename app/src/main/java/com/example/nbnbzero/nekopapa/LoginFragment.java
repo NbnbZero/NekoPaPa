@@ -97,4 +97,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
+    public void onPause(){
+        super.onPause();
+        System.out.println("LoginFragment onPause");
+    }
+
+    public void onResume(){
+        super.onResume();
+        System.out.println("LoginFragment onResume");
+    }
 }

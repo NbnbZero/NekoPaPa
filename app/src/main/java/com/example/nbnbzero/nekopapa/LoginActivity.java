@@ -11,5 +11,17 @@ public class LoginActivity extends SingleFragmentActivity {
     protected Fragment createFragment() {
         return new LoginFragment();
     }
+
+
+    public void onPause(){
+        super.onPause();
+        System.out.println("LoginActivity onPause");
+    }
+
+    public void onResume(){
+        super.onResume();
+        System.out.println("LoginActivity onResume");
+    }
+
 }
 
