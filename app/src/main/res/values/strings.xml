@@ -18,7 +18,4 @@
     <string name="create">Create</string>
     <string name="exit">Exit</string>
 
-    <string name="permission_launch_activity">permission launch activity</string>
-    <string name="title_activity_maps">Map</string>
-
 </resources>
