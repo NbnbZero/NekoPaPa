@@ -21,4 +21,5 @@
     <string name="cat_body">Cat Body</string>
     <string name="cat_ear">Cat Ear</string>
     <string name="img_button">Img Button</string>
+    <string name="gauge">Gauge</string>
 </resources>

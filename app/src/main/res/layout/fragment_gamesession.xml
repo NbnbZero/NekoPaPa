@@ -19,35 +19,75 @@
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="184dp"
-        android:layout_height="210dp"
+        android:layout_height="192dp"
         android:adjustViewBounds="false"
         android:contentDescription="@string/cat_body"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.46"
         app:srcCompat="@drawable/test_image" />
 
     <ImageView
         android:id="@+id/cat_ear"
-        android:layout_width="195dp"
-        android:layout_height="252dp"
+        android:layout_width="236dp"
+        android:layout_height="212dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="false"
         android:contentDescription="@string/cat_ear"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        android:cropToPadding="false"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.452"
         app:srcCompat="@drawable/test_img3" />
 
     <ImageButton
         android:id="@+id/imageButton2"
-        android:layout_width="57dp"
+        android:layout_width="0dp"
         android:layout_height="52dp"
         android:layout_marginStart="28dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginEnd="299dp"
+        android:layout_marginRight="299dp"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/img_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/test_img3" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="27dp"
+        android:layout_marginRight="27dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/gauge"
+        android:layout_width="198dp"
+        android:layout_height="19dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="matrix"
+        android:contentDescription="@string/gauge"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.983" />
 
 </android.support.constraint.ConstraintLayout>
 
