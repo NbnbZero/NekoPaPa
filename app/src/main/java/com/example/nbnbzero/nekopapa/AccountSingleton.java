@@ -113,15 +113,13 @@ public class AccountSingleton {
         List<Account> accountList = new ArrayList<>();
         AccountCursorWrapper cursor = queryAccounts(null, null);
 
-        try {
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                accountList.add(cursor.getAccount());
-                cursor.moveToNext();
-            }
-        } finally {
-            cursor.close();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            accountList.add(cursor.getAccount());
+            cursor.moveToNext();
+
         }
+        cursor.close();
 
         return accountList;
     }

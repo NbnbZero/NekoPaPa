@@ -30,4 +30,3 @@ public class AccountErrorDialogFragment extends DialogFragment {
     }
 
 }
-

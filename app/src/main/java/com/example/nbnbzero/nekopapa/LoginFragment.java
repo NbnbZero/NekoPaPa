@@ -3,6 +3,7 @@ package com.example.nbnbzero.nekopapa;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -37,7 +38,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        String phoneNum = "123-456-7890";
+        phoneNum = phoneNum.trim();
+        System.out.println(phoneNum);
+        System.out.println("LoginFragment onCreateView");
         View v = inflater.inflate(R.layout.login, container, false);
 
         mUsernameEditText = (EditText) v.findViewById(R.id.username_text);
@@ -69,8 +73,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String queryStr = "SELECT * FROM " + AccountsTable.NAME + " WHERE " + AccountsTable.Cols.NAME +
                 " = ? AND " + AccountsTable.Cols.PASSWORD + " = ?";
         String[] whereArgs = new String[] {username, password};
-        Cursor cursor = mDatabase.rawQuery(queryStr, whereArgs);
+        Cursor cursor = new CursorWrapper(mDatabase.rawQuery(queryStr, whereArgs));
+
         if(cursor.getCount() > 0){
+            cursor.moveToNext();
+            System.out.println("USER_NAME ============== " + cursor.getString(1));
+        //    System.out.println("=============" + cursor.getString(cursor.getColumnIndex(AccountsTable.Cols.NAME)));
             toastMessage("Logged in successfully");
             getActivity().finish();
             startActivity(new Intent(getActivity(), GameSessionActivity.class));
@@ -106,7 +114,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     public void onResume(){
+        System.out.println("LoginFragment right before onResume");
         super.onResume();
         System.out.println("LoginFragment onResume");
     }
+
+
 }
