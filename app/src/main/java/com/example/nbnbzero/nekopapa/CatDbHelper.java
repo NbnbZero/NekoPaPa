@@ -22,12 +22,9 @@ public class CatDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + CatDbSchema.CatsTable.NAME + "(" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                CatDbSchema.CatsTable.Cols.id + " TEXT UNIQUE, " +
                 CatDbSchema.CatsTable.Cols.name + "TEXT" +
                 CatDbSchema.CatsTable.Cols.energy + "TEXT" +
                 CatDbSchema.CatsTable.Cols.mood + " TEXT" +
-                CatDbSchema.CatsTable.Cols.ear_type + "TEXT" +
-                CatDbSchema.CatsTable.Cols.eye_type + "TEXT" +
                 CatDbSchema.CatsTable.Cols.stripe_type + "TEXT" +
                 CatDbSchema.CatsTable.Cols.fur_color + "TEXT" +
                 CatDbSchema.CatsTable.Cols.characteristic + "TEXT" +

@@ -22,12 +22,8 @@ public class CatItemDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + CatItemDbSchema.CatItemTable.NAME + "(" +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                CatItemDbSchema.CatItemTable.Cols.id + " TEXT UNIQUE, " +
                 CatItemDbSchema.CatItemTable.Cols.price + "TEXT" +
                 CatItemDbSchema.CatItemTable.Cols.energy_effect + "TEXT" +
-                CatItemDbSchema.CatItemTable.Cols.item_type + " TEXT" +
-                CatItemDbSchema.CatItemTable.Cols.stemina_effect + "TEXT" +
-                CatItemDbSchema.CatItemTable.Cols.mood_effect + "TEXT" +
                 ")");
     }
 

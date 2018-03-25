@@ -2,12 +2,9 @@ package com.example.nbnbzero.nekopapa;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
+
 import com.example.nbnbzero.nekopapa.AccountDbSchema.AccountsTable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by NbnbZero and TeriyakiMayo on 2/20/2018.
@@ -17,7 +14,7 @@ import java.util.List;
 public class AccountSingleton {
     private static AccountSingleton sAccount;
 
-    private AccountDbHelper mDbHelper;
+    private DbHelper mDbHelper;
     private SQLiteDatabase mDatabase;
 
     private static final String INSERT_STMT = "INSERT INTO " + AccountsTable.NAME + " (name, password) VALUES (?, ?)" ;
@@ -30,7 +27,7 @@ public class AccountSingleton {
     }
 
     private AccountSingleton(Context context) {
-        mDbHelper = new AccountDbHelper(context.getApplicationContext());
+        mDbHelper = new DbHelper(context.getApplicationContext());
         mDatabase = mDbHelper.getWritableDatabase();
     }
 
@@ -70,14 +67,6 @@ public class AccountSingleton {
             mDatabase.endTransaction();
         }
 
-        List<Account> accountList = getAccounts();
-        System.out.println("============================");
-        System.out.println("size = " + accountList.size());
-        for (Account acct: accountList) {
-            System.out.println(acct.getName());
-        }
-        System.out.println("============================");
-
         return result;
     }
 
@@ -95,32 +84,4 @@ public class AccountSingleton {
         }
     }
 
-    private AccountCursorWrapper queryAccounts(String whereClause, String[] whereArgs) {
-        Cursor cursor = mDatabase.query(
-                AccountsTable.NAME,
-                null, // columns; null selects all columns
-                whereClause,
-                whereArgs,
-                null, // GROUP BY
-                null, // HAVING
-                null // ORDER BY
-        );
-
-        return new AccountCursorWrapper(cursor);
-    }
-
-    public List<Account> getAccounts() {
-        List<Account> accountList = new ArrayList<>();
-        AccountCursorWrapper cursor = queryAccounts(null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            accountList.add(cursor.getAccount());
-            cursor.moveToNext();
-
-        }
-        cursor.close();
-
-        return accountList;
-    }
 }

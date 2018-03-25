@@ -7,7 +7,7 @@ package com.example.nbnbzero.nekopapa;
  */
 public class AccountDbSchema {
     public static final class AccountsTable {
-        public static final String NAME = "accounts";
+        public static final String NAME = "Accounts";
 
         public static final class Cols {
             public static final String NAME = "name";

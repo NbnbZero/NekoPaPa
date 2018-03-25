@@ -8,7 +8,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,7 +24,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private EditText mEtUsername;
     private EditText mEtPassword;
     private EditText mEtConfirm;
-    private AccountDbHelper mDbHelper;
+    private DbHelper mDbHelper;
 
     private final String TAG = getClass().getSimpleName();
 

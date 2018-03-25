@@ -1,23 +1,19 @@
 package com.example.nbnbzero.nekopapa;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.List;
 import com.example.nbnbzero.nekopapa.AccountDbSchema.AccountsTable;
 
 /**
@@ -30,7 +26,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private EditText mUsernameEditText;
     private EditText mPasswordEditText;
     private AccountSingleton mAccountSingleton;
-    private AccountDbHelper mDbHelper;
+    private DbHelper mDbHelper;
     private SQLiteDatabase mDatabase;
 
     private final static String OPT_NAME = "name";
@@ -67,7 +63,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
 
         if (mDbHelper == null) {
-            mDbHelper = new AccountDbHelper(getActivity().getApplicationContext());
+            mDbHelper = new DbHelper(getActivity().getApplicationContext());
         }
         mDatabase = mDbHelper.getWritableDatabase();
         String queryStr = "SELECT * FROM " + AccountsTable.NAME + " WHERE " + AccountsTable.Cols.NAME +
@@ -77,7 +73,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         if(cursor.getCount() > 0){
             cursor.moveToNext();
-            System.out.println("USER_NAME ============== " + cursor.getString(1));
+         //   System.out.println("USER_NAME ============== " + cursor.getColumnIndex("_id"));
+        //    System.out.println("USER_NAME ============== " + cursor.getString(0));
+            System.out.println("USER_NAME ============== " + cursor.getString(cursor.getColumnIndex("_id")));
         //    System.out.println("=============" + cursor.getString(cursor.getColumnIndex(AccountsTable.Cols.NAME)));
             toastMessage("Logged in successfully");
             getActivity().finish();
