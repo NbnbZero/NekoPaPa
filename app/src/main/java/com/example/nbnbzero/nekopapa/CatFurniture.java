@@ -65,6 +65,7 @@ public class CatFurniture {
                     Integer.parseInt(cursor.getString(2)),
                     Integer.parseInt(cursor.getString(3)));
             list.add(catFurniture);
+            cursor.moveToNext();
         }
         return list;
     }

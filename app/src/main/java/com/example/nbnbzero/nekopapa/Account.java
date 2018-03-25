@@ -41,6 +41,7 @@ public class Account {
             Account account = new Account(Integer.parseInt(cursor.getString(0)),
                     cursor.getString(1), cursor.getString(2));
             list.add(account);
+            cursor.moveToNext();
         }
         return list;
     }

@@ -53,6 +53,7 @@ public class CatItem {
                     Integer.parseInt(cursor.getString(3)),
                     cursor.getString(4));
             list.add(catItem);
+            cursor.moveToNext();
         }
         return list;
     }

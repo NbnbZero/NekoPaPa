@@ -89,6 +89,7 @@ public class Cat {
                     dt,
                     Integer.parseInt(cursor.getString(9)));
             list.add(cat);
+            cursor.moveToNext();
         }
         return null;
     }

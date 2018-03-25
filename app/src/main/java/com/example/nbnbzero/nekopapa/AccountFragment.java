@@ -1,6 +1,8 @@
 package com.example.nbnbzero.nekopapa;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.CursorWrapper;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -95,10 +97,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         if ((password.equals(confirm)) && (!username.equals("")) && (!password.equals("")) && (!confirm.equals(""))) {
             DbManagerSingleton singleton = DbManagerSingleton.get(getActivity().getApplicationContext());
 
-            /*
-            Account account = new Account(username, password);
-            long result = singleton.addAccount(account);
-            */
 
             String[] values = {username, password};
             long result = singleton.insert(AccountDbSchema.AccountsTable.NAME,
@@ -109,6 +107,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             }else{
                 accountErrorDialog("Record exists");
             }
+
+            String queryStr = "SELECT * FROM " + AccountDbSchema.AccountsTable.NAME + " WHERE " + AccountDbSchema.AccountsTable.Cols.NAME +
+                    " = ?";
+            String[] values2 = {username};
+            Cursor cursor = new CursorWrapper(singleton.query(queryStr, values2));
+            Account acc = Account.getAccounts(cursor).get(0);
+
         } else if ((username.equals("")) || (password.equals("")) || (confirm.equals(""))) {
             accountErrorDialog("Missing entry");
         } else if (!password.equals(confirm)) {
