@@ -14,6 +14,9 @@ public class CatItemDbSchema {
             public static final String price = "price";
             public static final String description = "description";
             public static final String icon = "icon";
+
+            public static final String[] ColNames = {name, energy_effect, price, description,
+                icon};
         }
     }
 }

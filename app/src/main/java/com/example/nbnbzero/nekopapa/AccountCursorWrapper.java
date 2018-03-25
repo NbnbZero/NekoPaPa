@@ -19,7 +19,7 @@ public class AccountCursorWrapper extends CursorWrapper {
         String name = getString(getColumnIndex(AccountsTable.Cols.NAME));
         String password = getString(getColumnIndex(AccountsTable.Cols.PASSWORD));
 
-        Account account = new Account(name, password);
+        Account account = new Account(Integer.parseInt(getString(0)), name, password);
 
         return account;
     }

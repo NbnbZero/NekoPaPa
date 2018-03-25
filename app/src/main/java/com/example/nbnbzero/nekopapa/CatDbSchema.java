@@ -17,6 +17,9 @@ public class CatDbSchema{
             public static final String fur_color = "fur_color";
             public static final String lasttime_energy_consume = "lasttime_energy_consume";
             public static final String user_id = "user_id";
+
+            public static final String[] ColNames = {name, energy, mood, stemina, characteristic, stripe_type,
+                    fur_color, lasttime_energy_consume, user_id};
         }
     }
 }

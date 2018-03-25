@@ -15,6 +15,8 @@ public class CatFurnitureDbSchema {
             public static final String description = "description";
             public static final String icon = "icon";
             public static final String image = "image";
+
+            public static final String[] ColNames = {name, type, price, description, icon, image};
         }
     }
 }

@@ -25,7 +25,7 @@ import com.example.nbnbzero.nekopapa.AccountDbSchema.AccountsTable;
 public class LoginFragment extends Fragment implements View.OnClickListener {
     private EditText mUsernameEditText;
     private EditText mPasswordEditText;
-    private AccountSingleton mAccountSingleton;
+    private DbManagerSingleton sDbManager;
     private DbHelper mDbHelper;
     private SQLiteDatabase mDatabase;
 
@@ -58,25 +58,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         String username = mUsernameEditText.getText().toString();
         String password = mPasswordEditText.getText().toString();
 
-        if (mAccountSingleton == null) {
-            mAccountSingleton = AccountSingleton.get(getActivity().getApplicationContext());
+        if (sDbManager == null) {
+            sDbManager = DbManagerSingleton.get(getActivity().getApplicationContext());
         }
 
-        if (mDbHelper == null) {
-            mDbHelper = new DbHelper(getActivity().getApplicationContext());
-        }
-        mDatabase = mDbHelper.getWritableDatabase();
         String queryStr = "SELECT * FROM " + AccountsTable.NAME + " WHERE " + AccountsTable.Cols.NAME +
                 " = ? AND " + AccountsTable.Cols.PASSWORD + " = ?";
         String[] whereArgs = new String[] {username, password};
-        Cursor cursor = new CursorWrapper(mDatabase.rawQuery(queryStr, whereArgs));
+        Cursor cursor = new CursorWrapper(sDbManager.query(queryStr, whereArgs));
 
         if(cursor.getCount() > 0){
             cursor.moveToNext();
-         //   System.out.println("USER_NAME ============== " + cursor.getColumnIndex("_id"));
-        //    System.out.println("USER_NAME ============== " + cursor.getString(0));
             System.out.println("USER_NAME ============== " + cursor.getString(cursor.getColumnIndex("_id")));
-        //    System.out.println("=============" + cursor.getString(cursor.getColumnIndex(AccountsTable.Cols.NAME)));
             toastMessage("Logged in successfully");
             getActivity().finish();
             startActivity(new Intent(getActivity(), GameSessionActivity.class));

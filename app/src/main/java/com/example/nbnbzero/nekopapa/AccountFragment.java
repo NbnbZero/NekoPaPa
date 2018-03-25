@@ -93,9 +93,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
 
         if ((password.equals(confirm)) && (!username.equals("")) && (!password.equals("")) && (!confirm.equals(""))) {
-            AccountSingleton singleton = AccountSingleton.get(getActivity().getApplicationContext());
+            DbManagerSingleton singleton = DbManagerSingleton.get(getActivity().getApplicationContext());
+
+            /*
             Account account = new Account(username, password);
             long result = singleton.addAccount(account);
+            */
+
+            String[] values = {username, password};
+            long result = singleton.insert(AccountDbSchema.AccountsTable.NAME,
+                    DbManagerSingleton.getContentValues(AccountDbSchema.AccountsTable.Cols.ColNames, values));
             if(result >= 0) {
                 toastMessage("New record inserted");
                 getActivity().getSupportFragmentManager().popBackStack();
