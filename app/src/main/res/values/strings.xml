@@ -6,6 +6,9 @@
     <string name="password">Password:</string>
     <string name="nbnb">Nbnb</string>
 
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+
     <string name="account">Account</string>
     <string name="error">Error</string>
     <string name="passwords_match_error_text">Passwords do not match.</string>
