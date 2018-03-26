@@ -1,5 +1,7 @@
 package com.example.nbnbzero.nekopapa;
 
+import android.app.Activity;
+import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.text.SimpleDateFormat;
@@ -76,11 +78,6 @@ public class Cat {
         cursor.moveToFirst();
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
-        String[] str = cursor.getColumnNames();
-        for(int i = 0; i < cursor.getColumnCount(); i++){
-            System.out.println(i + " " + str[i]);
-        }
-
         while(!cursor.isAfterLast()){
             Date dt = new Date();
             try{
@@ -105,7 +102,7 @@ public class Cat {
         return list;
     }
 
-    public boolean updateEnergy(){
+    public boolean updateEnergyMood(){
         boolean updated = false;
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         try{
@@ -113,12 +110,15 @@ public class Cat {
             Date date = new Date();
             long now = date.getTime();
             long minutes = (now - lastTime) / (1000 * 60);
-            System.out.println("MMMMMMM = " + minutes);
             if(minutes >= 1){
+                //update energy
                 this.energy -= minutes;
                 if(this.energy < 0){
                     this.energy = 0;
                 }
+                //update mood
+
+                //set update time
                 this.lasttime_energy_consume = date;
                 updated = true;
             }
@@ -127,5 +127,23 @@ public class Cat {
         }
 
         return updated;
+    }
+
+    public String[] dataArray(){
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        String[] temp = {name, energy + "", mood + "", stemina + "", characteristic + "",
+                stripe_type + "", fur_color + "", fmt.format(lasttime_energy_consume),
+        user_id + ""};
+        return temp;
+    }
+
+    public int updateCatToDB(Activity activity){
+        DbManagerSingleton singleton = DbManagerSingleton.get(activity);
+        ContentValues tempCv = DbManagerSingleton.getContentValues(CatDbSchema.CatsTable.Cols.ColNames, dataArray());
+        String whereClause = "_id = ?";
+        String[] whereArgs = {id + ""};
+        int rows = singleton.update(CatDbSchema.CatsTable.NAME, tempCv, whereClause, whereArgs);
+        System.out.println("Cat " + id + " updated!");
+        return rows;
     }
 }

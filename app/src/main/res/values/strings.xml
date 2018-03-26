@@ -22,6 +22,7 @@
     <string name="cat_ear">Cat Ear</string>
     <string name="img_button">Img Button</string>
 
+    <string name="gold_panel_label">Gold</string>
     <string name="cat_name_label">Name</string>
     <string name="energy_label">Energy</string>
     <string name="gauge">Gauge</string>

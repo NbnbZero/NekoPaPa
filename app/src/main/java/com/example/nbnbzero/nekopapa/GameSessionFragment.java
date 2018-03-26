@@ -1,6 +1,5 @@
 package com.example.nbnbzero.nekopapa;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.graphics.Bitmap;
@@ -13,11 +12,11 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -27,6 +26,7 @@ import java.util.List;
  */
 
 public class GameSessionFragment extends Fragment implements View.OnClickListener {
+    TextView userGoldView;
     AppCompatImageView catView;
     TextView catNameView;
     AppCompatImageView gaugeView;
@@ -42,19 +42,19 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_gamesession, container, false);
 
-        //Get all cats of user
-        /*
-        DbManagerSingleton singleton = DbManagerSingleton.get(getActivity().getApplicationContext());
-        GameSessionActivity activity = (GameSessionActivity) getActivity();
-        String queryStr = "SELECT * FROM " + CatDbSchema.CatsTable.NAME + " WHERE user_id = ? ";
-        String[] whereArgs = new String[] {activity.currentUser.getId() + ""};
-        Cursor cursor = new CursorWrapper(singleton.query(queryStr, whereArgs));
-        catList = Cat.getCats(cursor);
-*/
+        userGoldView = (TextView) v.findViewById(R.id.gold_panel);
+        updateUserDisplay();
+
         catView = (AppCompatImageView) v.findViewById(R.id.cat_img);
-//        catView.setImageResource(R.drawable.cat_body_pure_orange);
         catNameView = (TextView) v.findViewById(R.id.cat_name_label);
-//        catNameView.setText(catList.get(currentCatId).getName());
+        Button nextButton = (Button) v.findViewById(R.id.next_cat_button);
+        if (nextButton != null) {
+            nextButton.setOnClickListener(this);
+        }
+        Button previousButton = (Button) v.findViewById(R.id.previous_cat_button);
+        if (previousButton != null) {
+            previousButton.setOnClickListener(this);
+        }
 
         updateAndDisplayCatData();
 
@@ -66,13 +66,39 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
     }
 
     public void onClick(View view) {
+        boolean displayChanged = false;
         switch (view.getId()) {
-            case R.id.cat_img:
-                System.out.println("TTTTTTTTTTTTTTTTTT");
-         //       perc -= .1f;
-         //       setGauge(perc);
+            case R.id.next_cat_button:
+                nextCatIndex();
+                displayChanged = true;
+            //    System.out.println("NEXTTTTTTTTTTTTTTTTT");
+                break;
+            case R.id.previous_cat_button:
+                previousCatIndex();
+                displayChanged = true;
+            //    System.out.println("PPPPPPPPPPPPPREVIOUS");
                 break;
         }
+        if(displayChanged){
+            updateAndDisplayCatData();
+        }
+    }
+
+    private void updateUserDisplay(){
+        if(userGoldView != null){
+            GameSessionActivity activity = (GameSessionActivity) getActivity();
+            userGoldView.setText("Gold " + activity.currentUser.getGold());
+        }
+    }
+
+    private void nextCatIndex(){
+        currentCatId++;
+        currentCatId = currentCatId == catList.size() ? 0 : currentCatId;
+    }
+
+    private void previousCatIndex(){
+        currentCatId--;
+        currentCatId = currentCatId == -1 ? catList.size() - 1 : currentCatId;
     }
 
     private void updateAndDisplayCatData(){
@@ -84,7 +110,8 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
         System.out.println("CURRRRRRRRRRRR USER ID = " + activity.currentUser.getId());
         Cursor cursor = new CursorWrapper(singleton.query(queryStr, whereArgs));
         catList = Cat.getCats(cursor);
-
+        System.out.println("CAT AMOUNTTTTTTTTT = " + catList.size());
+        System.out.println("CAT ID = " + currentCatId);
         //set cat name
         if(catNameView != null){
             catNameView.setText(catList.get(currentCatId).getName());
@@ -161,33 +188,15 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
         getActivity().runOnUiThread(new Runnable(){
             @Override
             public void run(){
-                /*
-                System.out.println("GAUGE UPDATED=================");
-                if(perc >= .1f) {
-                    perc -= .1f;
-                }
-                setGauge(perc);
-                */
-                boolean updated = catList.get(currentCatId).updateEnergy();
-        //        updated = false;
+                Cat cat = catList.get(currentCatId);
+                boolean updated = cat.updateEnergyMood();
                 if(updated){
-                    SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                    DbManagerSingleton singleton = DbManagerSingleton.get(getActivity().getApplicationContext());
-                    Cat cat = catList.get(currentCatId);
-                    String[] catValues = {cat.getName(), cat.getEnergy() + "",
-                            cat.getMood() + "", cat.getStemina() + "", cat.getCharacteristic() + "",
-                            cat.getStripe_type() + "", cat.getFur_color() + "", fmt.format(cat.getLasttimeEnergyConsume()),
-                            cat.getUser_id() + ""};
-                    ContentValues tempCv = DbManagerSingleton.getContentValues(CatDbSchema.CatsTable.Cols.ColNames, catValues);
-                    String whereClause = "_id = ?";
-                    String[] whereArgs = {cat.getId() + ""};
-                    int rows = singleton.update(CatDbSchema.CatsTable.NAME, tempCv, whereClause, whereArgs);
-                    System.out.println("CAT UPDATED = " + rows);
-
+                    cat.updateCatToDB(getActivity());
                     System.out.println("Gauge PPPPPPPPPP = " + ((float)cat.getEnergy() / (float)(cat.getStemina() * 25)));
                     System.out.println(cat.getEnergy() + " " + (float)(cat.getStemina() * 25));
                     setGauge((float)cat.getEnergy() / (float)(cat.getStemina() * 25));
                 }
+                setGauge((float)cat.getEnergy() / (float)(cat.getStemina() * 25));
             }
         });
 
