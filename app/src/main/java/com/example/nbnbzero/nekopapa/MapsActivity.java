@@ -149,4 +149,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         return newBitmap;
     }
+
+    public double getDistance(LatLng start,LatLng end){
+        double lat1 = (Math.PI/180)*start.latitude;
+        double lat2 = (Math.PI/180)*end.latitude;
+
+        double lon1 = (Math.PI/180)*start.longitude;
+        double lon2 = (Math.PI/180)*end.longitude;
+
+        double R = 6371;
+
+        double d =  Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon2-lon1))*R;
+
+        return d*1000;
+    }
 }
