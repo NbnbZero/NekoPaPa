@@ -117,7 +117,18 @@ public class Cat {
                     this.energy = 0;
                 }
                 //update mood
-
+                int[] moodType = moodProbability(characteristic);
+                int d = (int) (Math.random() * 100);
+                if(d <= moodType[0]){
+                    this.mood = 1;
+                }else if(d <= moodType[1]){
+                    this.mood = 2;
+                }else{
+                    this.mood = 3;
+                }
+                if(this.energy < 5){
+                    this.mood = 1;
+                }
                 //set update time
                 this.lasttime_energy_consume = date;
                 updated = true;
@@ -127,6 +138,41 @@ public class Cat {
         }
 
         return updated;
+    }
+
+    private int[] moodProbability(int chara){
+        int[] result = {0, 0};
+        switch(chara){
+            case 1:
+                result[0] = 50;
+                result[1] = 70;
+                break;
+            case 2:
+                result[0] = 20;
+                result[1] = 70;
+                break;
+            case 3:
+                result[0] = 20;
+                result[1] = 50;
+                break;
+        }
+        return result;
+    }
+
+    public static String moodName(int i){
+        String moodNa = "";
+        switch(i){
+            case 1:
+                moodNa = "Angry";
+                break;
+            case 2:
+                moodNa = "Calm";
+                break;
+            case 3:
+                moodNa = "Happy";
+                break;
+        }
+        return moodNa;
     }
 
     public String[] dataArray(){

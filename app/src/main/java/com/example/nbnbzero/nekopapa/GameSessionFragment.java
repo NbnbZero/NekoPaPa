@@ -31,6 +31,7 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
     TextView catNameView;
     AppCompatImageView gaugeView;
     private Bitmap gaugeBitmap;
+    TextView catMoodView;
 
     private String imageFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath() +
             File.separator + "gauge.png";
@@ -61,6 +62,8 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
         gaugeView = (AppCompatImageView) v.findViewById(R.id.gauge);
         gaugeBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.gauge);
         setGauge(perc);
+
+        catMoodView = (TextView) v.findViewById(R.id.mood_status);
 
         return v;
     }
@@ -112,11 +115,13 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
         catList = Cat.getCats(cursor);
         System.out.println("CAT AMOUNTTTTTTTTT = " + catList.size());
         System.out.println("CAT ID = " + currentCatId);
+
         //set cat name
         if(catNameView != null){
             catNameView.setText(catList.get(currentCatId).getName());
         }
 
+        //set cat image
         if(catView != null){
             catView.setImageResource(catImgR(catList.get(currentCatId)));
         }
@@ -194,9 +199,9 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
                     cat.updateCatToDB(getActivity());
                     System.out.println("Gauge PPPPPPPPPP = " + ((float)cat.getEnergy() / (float)(cat.getStemina() * 25)));
                     System.out.println(cat.getEnergy() + " " + (float)(cat.getStemina() * 25));
-                    setGauge((float)cat.getEnergy() / (float)(cat.getStemina() * 25));
                 }
                 setGauge((float)cat.getEnergy() / (float)(cat.getStemina() * 25));
+                catMoodView.setText(Cat.moodName(cat.getMood()));
             }
         });
 
