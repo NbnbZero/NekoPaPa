@@ -48,6 +48,18 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
 
         catView = (AppCompatImageView) v.findViewById(R.id.cat_img);
         catNameView = (TextView) v.findViewById(R.id.cat_name_label);
+        Button energyButton = (Button) v.findViewById(R.id.buy_energy_button);
+        if (energyButton != null) {
+            energyButton.setOnClickListener(this);
+        }
+        Button sellButton = (Button) v.findViewById(R.id.sell_cat_button);
+        if (sellButton != null) {
+            sellButton.setOnClickListener(this);
+        }
+        Button mapButton = (Button) v.findViewById(R.id.goto_map_button);
+        if (mapButton != null) {
+            mapButton.setOnClickListener(this);
+        }
         Button nextButton = (Button) v.findViewById(R.id.next_cat_button);
         if (nextButton != null) {
             nextButton.setOnClickListener(this);
@@ -70,16 +82,42 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
 
     public void onClick(View view) {
         boolean displayChanged = false;
+        GameSessionActivity activity;
+        Account acc;
+        Cat cat;
         switch (view.getId()) {
+            case R.id.buy_energy_button:
+                activity = (GameSessionActivity) getActivity();
+                acc = activity.currentUser;
+                cat = catList.get(currentCatId);
+                if(acc.getGold() >= 30){
+                    acc.setGold(acc.getGold() - 30);
+                    acc.updateAccountToDB(getActivity());
+                    cat.setEnergy(cat.getEnergy() + 10);
+                    cat.updateCatToDB(activity);
+                    updateUserDisplay();
+                    updateAndDisplayCatData();
+                }
+                break;
+            case R.id.sell_cat_button:
+                activity = (GameSessionActivity) getActivity();
+                acc = activity.currentUser;
+                cat = catList.get(currentCatId);
+                if(catList.size() >= 2){
+                    int price = cat.catPrice();
+                    cat.deleteCatInDB(activity);
+                    acc.setGold(acc.getGold() + price);
+                    updateUserDisplay();
+                    updateAndDisplayCatData();
+                }
+                break;
             case R.id.next_cat_button:
                 nextCatIndex();
                 displayChanged = true;
-            //    System.out.println("NEXTTTTTTTTTTTTTTTTT");
                 break;
             case R.id.previous_cat_button:
                 previousCatIndex();
                 displayChanged = true;
-            //    System.out.println("PPPPPPPPPPPPPREVIOUS");
                 break;
         }
         if(displayChanged){

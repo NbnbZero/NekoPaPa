@@ -73,6 +73,13 @@ public class Cat {
         return this.user_id;
     }
 
+    public void setEnergy(int energy) {
+        if(energy >= this.stemina * 25){
+            energy = this.stemina * 25;
+        }
+        this.energy = energy;
+    }
+
     public static List<Cat> getCats(Cursor cursor){
         List<Cat> list = new ArrayList<Cat>();
         cursor.moveToFirst();
@@ -191,5 +198,17 @@ public class Cat {
         int rows = singleton.update(CatDbSchema.CatsTable.NAME, tempCv, whereClause, whereArgs);
         System.out.println("Cat " + id + " updated!");
         return rows;
+    }
+
+    public int deleteCatInDB(Activity activity){
+        DbManagerSingleton singleton = DbManagerSingleton.get(activity);
+        String whereClause = "_id = ?";
+        String[] whereArgs = {id + ""};
+        int rows = singleton.delete(CatDbSchema.CatsTable.NAME, whereClause, whereArgs);
+        return rows;
+    }
+
+    public int catPrice(){
+        return stemina * 100 + characteristic * 100 + stripe_type * 500 + fur_color * 500;
     }
 }

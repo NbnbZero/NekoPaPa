@@ -23,6 +23,9 @@
     <string name="img_button">Img Button</string>
 
     <string name="gold_panel_label">Gold</string>
+    <string name="buy_energy_label">Replenish Energy 30 G</string>
+    <string name="sell_cat_label">Sell Cat</string>
+    <string name="goto_map_label">Map</string>
     <string name="cat_name_label">Name</string>
     <string name="energy_label">Energy</string>
     <string name="gauge">Gauge</string>
