@@ -15,13 +15,10 @@ import java.util.TimerTask;
 public class GameSessionActivity extends SingleFragmentActivity{
     static int count = 2;
     GameSessionFragment frag = null;
-    public Account currentUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
-        currentUser = (Account) getIntent().getSerializableExtra("user_id");
 
         Timer mytime = new Timer();
         mytime.scheduleAtFixedRate(new TimerTask(){

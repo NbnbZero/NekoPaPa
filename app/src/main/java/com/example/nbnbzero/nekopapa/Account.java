@@ -95,13 +95,14 @@ public class Account implements Serializable{
     }
 
     public void updateLoginDateAndGold(){
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat fmt = DateManager.fmt;
         try{
             long lastTime = this.lastLogin.getTime();
             Date date = new Date();
             long now = date.getTime();
             long minutes = (now - lastTime) / (1000 * 60);
             if(minutes >= 1){
+                System.out.println("ACCCCCCCCCOUNT MIN = " + minutes);
                 this.gold += 100;
             }
             this.lastLogin = date;
@@ -111,7 +112,7 @@ public class Account implements Serializable{
     }
 
     public String[] dataArray(){
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat fmt = DateManager.fmt;
         String[] temp = {mName, mPassword, gold + "", fmt.format(lastLogin)};
         return temp;
     }

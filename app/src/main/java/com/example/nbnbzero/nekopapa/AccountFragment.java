@@ -1,6 +1,5 @@
 package com.example.nbnbzero.nekopapa;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorWrapper;
@@ -101,7 +100,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         if ((password.equals(confirm)) && (!username.equals("")) && (!password.equals("")) && (!confirm.equals(""))) {
             DbManagerSingleton singleton = DbManagerSingleton.get(getActivity().getApplicationContext());
 
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            SimpleDateFormat fmt = DateManager.fmt;
             Date date = new Date();
             //create new account
             String[] values = {username, password, "500", fmt.format(date)};
@@ -116,15 +115,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             System.out.println("Account Insertion = " + result);
 
             //create cat for new account
-
-
             int user_id = (int)result;
             String[] catValues = {username + "'s cat", "25", "3", "1", "1", "1", "1", fmt.format(date), user_id + ""};
             String[] catValues2 = {username + "'s cat2", "25", "3", "1", "1", "2", "2", fmt.format(date), user_id + ""};
-            ContentValues tempCv = DbManagerSingleton.getContentValues(CatDbSchema.CatsTable.Cols.ColNames, catValues);
-            result = singleton.insert(CatDbSchema.CatsTable.NAME, tempCv);
-            tempCv = DbManagerSingleton.getContentValues(CatDbSchema.CatsTable.Cols.ColNames, catValues2);
-            result = singleton.insert(CatDbSchema.CatsTable.NAME, tempCv);
+            result = Cat.insertCat(getActivity().getApplicationContext(), catValues);
+            result = Cat.insertCat(getActivity().getApplicationContext(), catValues2);
             System.out.println("Cat Insertion = " + result);
 
             //print inserted cat

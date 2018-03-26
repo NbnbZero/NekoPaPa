@@ -1,19 +1,22 @@
 package com.example.nbnbzero.nekopapa;
 
-import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by tianz on 3/25/2018.
  */
 
 public class Cat {
+    private static final int minMateEnergy = 10;
+
     private String name;
     private int id, energy, mood, stemina, characteristic, stripe_type,
             fur_color, user_id;
@@ -111,14 +114,18 @@ public class Cat {
 
     public boolean updateEnergyMood(){
         boolean updated = false;
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat fmt = DateManager.fmt;
         try{
             long lastTime = this.lasttime_energy_consume.getTime();
             Date date = new Date();
             long now = date.getTime();
             long minutes = (now - lastTime) / (1000 * 60);
+            long min = TimeUnit.MILLISECONDS.toMinutes(now - lastTime);
             if(minutes >= 1){
                 //update energy
+                System.out.println("Last = " + lastTime + " " + fmt.format(this.lasttime_energy_consume));
+                System.out.println("Now = " + now + " " + fmt.format(date));
+                System.out.println("CURRRRRRRR ENERGY = " + this.energy + " minute = " + minutes + " " + min);
                 this.energy -= minutes;
                 if(this.energy < 0){
                     this.energy = 0;
@@ -183,15 +190,15 @@ public class Cat {
     }
 
     public String[] dataArray(){
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat fmt = DateManager.fmt;
         String[] temp = {name, energy + "", mood + "", stemina + "", characteristic + "",
                 stripe_type + "", fur_color + "", fmt.format(lasttime_energy_consume),
         user_id + ""};
         return temp;
     }
 
-    public int updateCatToDB(Activity activity){
-        DbManagerSingleton singleton = DbManagerSingleton.get(activity);
+    public int updateCatToDB(Context context){
+        DbManagerSingleton singleton = DbManagerSingleton.get(context);
         ContentValues tempCv = DbManagerSingleton.getContentValues(CatDbSchema.CatsTable.Cols.ColNames, dataArray());
         String whereClause = "_id = ?";
         String[] whereArgs = {id + ""};
@@ -200,8 +207,8 @@ public class Cat {
         return rows;
     }
 
-    public int deleteCatInDB(Activity activity){
-        DbManagerSingleton singleton = DbManagerSingleton.get(activity);
+    public int deleteCatInDB(Context context){
+        DbManagerSingleton singleton = DbManagerSingleton.get(context);
         String whereClause = "_id = ?";
         String[] whereArgs = {id + ""};
         int rows = singleton.delete(CatDbSchema.CatsTable.NAME, whereClause, whereArgs);
@@ -210,5 +217,139 @@ public class Cat {
 
     public int catPrice(){
         return stemina * 100 + characteristic * 100 + stripe_type * 500 + fur_color * 500;
+    }
+
+    public static String steminaStr(int stemina){
+        String str = "";
+        switch(stemina){
+            case 1:
+                str = "weak";
+                break;
+            case 2:
+                str = "normal";
+                break;
+            case 3:
+                str = "good";
+                break;
+            case 4:
+                str = "strong";
+                break;
+        }
+        return str;
+    }
+
+    public static String charactStr(int charact){
+        String str = "";
+        switch(charact){
+            case 1:
+                str = "irritable";
+                break;
+            case 2:
+                str = "introversive";
+                break;
+            case 3:
+                str = "active";
+                break;
+        }
+        return str;
+    }
+
+    public static String stripeStr(int st){
+        String str = "";
+        switch(st){
+            case 1:
+                str = "pure";
+                break;
+            case 2:
+                str = "dots";
+                break;
+            case 3:
+                str = "zebra";
+                break;
+        }
+        return str;
+    }
+
+    public static String furStr(int fur){
+        String str = "";
+        switch(fur){
+            case 1:
+                str = "orange";
+                break;
+            case 2:
+                str = "yellow";
+                break;
+            case 3:
+                str = "scarlet";
+                break;
+        }
+        return str;
+    }
+
+    public boolean mateWithWildCat(WildCat wc, Context context){
+        if(this.energy <= minMateEnergy){
+            return false;
+        }
+        this.energy -= minMateEnergy;
+        this.updateCatToDB(context);
+        int ra = (int) (Math.random() * 100);
+        if(ra > mateSuccessRate()){
+            return false;
+        }
+
+        int stemina = randNum(this.stemina, wc.getStemina());
+        int charact = randNum(this.characteristic, wc.getCharacteristic());
+        int stripe_type = randNum(this.stripe_type, wc.getStripe_type());
+        int fur_color = randNum(this.fur_color, wc.getFur_color());
+
+        Date date = new Date();
+        String[] newCatValues = {"", 25 * stemina + "",
+                "3", stemina + "", charact + "", stripe_type + "", fur_color + "",
+                DateManager.fmt.format(date), user_id + ""};
+
+        long result = insertCat(context, newCatValues);
+
+        DbManagerSingleton singleton = DbManagerSingleton.get(context);
+        String[] colName = {CatDbSchema.CatsTable.Cols.name};
+        String[] values = {UserData.currentUser.getName() + "'s cat " + result};
+        ContentValues tempCv = DbManagerSingleton.getContentValues(colName, values);
+        String whereClause = "_id = ?";
+        String[] whereArgs = {result + ""};
+        int rows = singleton.update(CatDbSchema.CatsTable.NAME, tempCv, whereClause, whereArgs);
+
+
+
+        return true;
+    }
+
+    private int mateSuccessRate(){
+        int rate = 0;
+        switch(mood){
+            case 1:
+                rate = 70;
+                break;
+            case 2:
+                rate = 80;
+                break;
+            case 3:
+                rate = 90;
+                break;
+        }
+        return rate;
+    }
+
+    public static long insertCat(Context context, String[] values){
+        DbManagerSingleton singleton = DbManagerSingleton.get(context);
+        ContentValues tempCv = DbManagerSingleton.getContentValues(CatDbSchema.CatsTable.Cols.ColNames, values);
+        return singleton.insert(CatDbSchema.CatsTable.NAME, tempCv);
+    }
+
+    private int randNum(int a, int b){
+        int ra = (int) (Math.random() * 100);
+        if(ra <= 50){
+            return a;
+        }else{
+            return b;
+        }
     }
 }

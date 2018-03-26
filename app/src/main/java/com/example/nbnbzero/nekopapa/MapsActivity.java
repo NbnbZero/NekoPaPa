@@ -1,12 +1,9 @@
 package com.example.nbnbzero.nekopapa;
 
 import android.app.FragmentManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -37,10 +34,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     double latitude, longitude;
 
-    /*public MapsActivity (WildCat[] wildCat){
-        this.wildCat = wildCat;
-    }*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -65,40 +58,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         me = mMap.addMarker(new MarkerOptions().position(myloc));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(myloc));
 
-        for(int i = 0; i<numWC; i++){
-            Random rc = new Random();
-            WildCat wc = new WildCat(1+rc.nextInt(4),1+rc.nextInt(3),1+rc.nextInt(3),1+rc.nextInt(3));
-            wildCat[i] = wc;
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if(!marker.equals(me)) {
+                    FragmentManager manager = getFragmentManager();
+                    WildCatDialogFragment fragment = new WildCatDialogFragment();
+                    UserData.currentMarker = marker;
+                    fragment.show(manager, "dialog");
+                }
+                return true;
+            }
+        });
+
+        if(UserData.wildCatList == null){
+            return;
         }
 
-        for(int i = 0; i<wildCat.length;i++){
+        for(int i = 0; i<UserData.wildCatList.length;i++){
 
             Random r = new Random();
             catLat = latitude + rangeMin + (rangeMax - rangeMin) * r.nextDouble();
             catLong = longitude + rangeMin + (rangeMax - rangeMin) * r.nextDouble();
             LatLng catLoc = new LatLng(catLat,catLong);
 
-            int result = catImgR(wildCat[i]);
+            int result = catImgR(UserData.wildCatList[i]);
             Bitmap b = setGauge(result);
             Marker marker = mMap.addMarker(new MarkerOptions()
-                    .position(catLoc)
+                    .position(catLoc).zIndex(i)
                     .icon(BitmapDescriptorFactory.fromBitmap(b)));
 
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    if(!marker.equals(me)) {
-                        FragmentManager manager = getFragmentManager();
-                        WildCatDialogFragment fragment = new WildCatDialogFragment();
-
-                        Bundle args = new Bundle();
-                        fragment.setArguments(args);
-                        fragment.show(manager, "dialog");
-                    }
-                    return true;
-                }
-            });
         }
 
     }
@@ -158,17 +148,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return newBitmap;
     }
 
-    public double getDistance(LatLng start,LatLng end){
-        double lat1 = (Math.PI/180)*start.latitude;
-        double lat2 = (Math.PI/180)*end.latitude;
-
-        double lon1 = (Math.PI/180)*start.longitude;
-        double lon2 = (Math.PI/180)*end.longitude;
-
-        double R = 6371;
-
-        double d =  Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lat1)*Math.cos(lat2)*Math.cos(lon2-lon1))*R;
-
-        return d*1000;
-    }
 }

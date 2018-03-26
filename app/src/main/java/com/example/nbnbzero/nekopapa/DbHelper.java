@@ -14,7 +14,7 @@ import com.example.nbnbzero.nekopapa.AccountDbSchema.AccountsTable;
 public class DbHelper extends SQLiteOpenHelper {
     private Context mContext;
     private static final String DATABASE_NAME = "NekoPaPa.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     // Class name for logging.
     private final String TAG = getClass().getSimpleName();

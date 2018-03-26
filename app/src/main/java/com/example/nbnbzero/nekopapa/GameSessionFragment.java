@@ -39,7 +39,6 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
     private float perc = 1;
 
     private List<Cat> catList = null;
-    private int currentCatId = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_gamesession, container, false);
@@ -81,36 +80,38 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
         return v;
     }
 
+    public void onResume(){
+        super.onResume();
+        updateAndDisplayCatData();
+    }
+
     public void onClick(View view) {
         boolean displayChanged = false;
-        GameSessionActivity activity;
         Account acc;
         Cat cat;
         switch (view.getId()) {
             case R.id.buy_energy_button:
-                activity = (GameSessionActivity) getActivity();
-                acc = activity.currentUser;
-                cat = catList.get(currentCatId);
+                acc = UserData.currentUser;
+                cat = catList.get(UserData.currentCatId);
                 if(acc.getGold() >= 30){
                     acc.setGold(acc.getGold() - 30);
                     acc.updateAccountToDB(getActivity());
                     cat.setEnergy(cat.getEnergy() + 10);
-                    cat.updateCatToDB(activity);
+                    cat.updateCatToDB(getActivity().getApplicationContext());
                     updateUserDisplay();
                     updateAndDisplayCatData();
                 }
                 break;
             case R.id.sell_cat_button:
-                activity = (GameSessionActivity) getActivity();
-                acc = activity.currentUser;
-                cat = catList.get(currentCatId);
+                acc = UserData.currentUser;
+                cat = catList.get(UserData.currentCatId);
                 if(catList.size() >= 2){
+                    UserData.currentCatId = 0;
                     int price = cat.catPrice();
-                    cat.deleteCatInDB(activity);
+                    cat.deleteCatInDB(getActivity().getApplicationContext());
                     acc.setGold(acc.getGold() + price);
                     updateUserDisplay();
                     updateAndDisplayCatData();
-                    currentCatId = 0;
                 }
                 break;
             case R.id.goto_map_button:
@@ -133,18 +134,18 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
     private void updateUserDisplay(){
         if(userGoldView != null){
             GameSessionActivity activity = (GameSessionActivity) getActivity();
-            userGoldView.setText("Gold " + activity.currentUser.getGold());
+            userGoldView.setText("Gold " + UserData.currentUser.getGold());
         }
     }
 
     private void nextCatIndex(){
-        currentCatId++;
-        currentCatId = currentCatId == catList.size() ? 0 : currentCatId;
+        UserData.currentCatId++;
+        UserData.currentCatId = UserData.currentCatId == catList.size() ? 0 : UserData.currentCatId;
     }
 
     private void previousCatIndex(){
-        currentCatId--;
-        currentCatId = currentCatId == -1 ? catList.size() - 1 : currentCatId;
+        UserData.currentCatId--;
+        UserData.currentCatId = UserData.currentCatId == -1 ? catList.size() - 1 : UserData.currentCatId;
     }
 
     private void updateAndDisplayCatData(){
@@ -152,21 +153,23 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
         DbManagerSingleton singleton = DbManagerSingleton.get(getActivity().getApplicationContext());
         GameSessionActivity activity = (GameSessionActivity) getActivity();
         String queryStr = "SELECT * FROM " + CatDbSchema.CatsTable.NAME + " WHERE user_id = ? ";
-        String[] whereArgs = new String[] {activity.currentUser.getId() + ""};
-        System.out.println("CURRRRRRRRRRRR USER ID = " + activity.currentUser.getId());
+        String[] whereArgs = new String[] {UserData.currentUser.getId() + ""};
+        System.out.println("CURRRRRRRRRRRR USER ID = " + UserData.currentUser.getId());
         Cursor cursor = new CursorWrapper(singleton.query(queryStr, whereArgs));
         catList = Cat.getCats(cursor);
+        UserData.catList = catList;
+
         System.out.println("CAT AMOUNTTTTTTTTT = " + catList.size());
-        System.out.println("CAT ID = " + currentCatId);
+        System.out.println("CAT ID = " + UserData.currentCatId);
 
         //set cat name
         if(catNameView != null){
-            catNameView.setText(catList.get(currentCatId).getName());
+            catNameView.setText(catList.get(UserData.currentCatId).getName());
         }
 
         //set cat image
         if(catView != null){
-            catView.setImageResource(catImgR(catList.get(currentCatId)));
+            catView.setImageResource(catImgR(catList.get(UserData.currentCatId)));
         }
 
     }
@@ -236,7 +239,7 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
         getActivity().runOnUiThread(new Runnable(){
             @Override
             public void run(){
-                Cat cat = catList.get(currentCatId);
+                Cat cat = catList.get(UserData.currentCatId);
                 boolean updated = cat.updateEnergyMood();
                 if(updated){
                     cat.updateCatToDB(getActivity());

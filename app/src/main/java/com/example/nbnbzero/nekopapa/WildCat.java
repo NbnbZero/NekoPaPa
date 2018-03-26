@@ -1,15 +1,11 @@
 package com.example.nbnbzero.nekopapa;
 
-import java.util.Date;
-
 /**
  * Created by lingchen on 3/26/18.
  */
 
 public class WildCat {
     private int stemina, characteristic, stripe_type, fur_color;
-
-
 
     public WildCat(int stemina, int characteristic, int stripe_type, int fur_color) {
 
@@ -34,6 +30,5 @@ public class WildCat {
     public int getFur_color() {
         return this.fur_color;
     }
-
 
 }
