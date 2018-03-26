@@ -61,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng myloc = new LatLng(latitude,longitude);
-        me = mMap.addMarker(new MarkerOptions().position(myloc).title("I'm here..."));
+        me = mMap.addMarker(new MarkerOptions().position(myloc));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(myloc));
 
         Random r = new Random();
@@ -80,7 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    if(marker != me) {
+                    if(!marker.equals(me)) {
                         FragmentManager manager = getFragmentManager();
                         WildCatDialogFragment fragment = new WildCatDialogFragment();
 
