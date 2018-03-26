@@ -1,5 +1,6 @@
 package com.example.nbnbzero.nekopapa;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorWrapper;
@@ -15,6 +16,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by NbnbZero and TeriyakiMayo on 2/20/2018.
@@ -97,7 +101,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         if ((password.equals(confirm)) && (!username.equals("")) && (!password.equals("")) && (!confirm.equals(""))) {
             DbManagerSingleton singleton = DbManagerSingleton.get(getActivity().getApplicationContext());
 
-
+            //create new account
             String[] values = {username, password};
             long result = singleton.insert(AccountDbSchema.AccountsTable.NAME,
                     DbManagerSingleton.getContentValues(AccountDbSchema.AccountsTable.Cols.ColNames, values));
@@ -107,12 +111,28 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             }else{
                 accountErrorDialog("Record exists");
             }
+            System.out.println("Account Insertion = " + result);
 
-            String queryStr = "SELECT * FROM " + AccountDbSchema.AccountsTable.NAME + " WHERE " + AccountDbSchema.AccountsTable.Cols.NAME +
-                    " = ?";
-            String[] values2 = {username};
-            Cursor cursor = new CursorWrapper(singleton.query(queryStr, values2));
-            Account acc = Account.getAccounts(cursor).get(0);
+            //create cat for new account
+
+            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            Date date = new Date();
+            int user_id = (int)result;
+            String[] catValues = {username + "'s cat", "25", "3", "1", "1", "1", "1", fmt.format(date), user_id + ""};
+            String[] catValues2 = {username + "'s cat", "25", "3", "1", "1", "1", "2", fmt.format(date), user_id + ""};
+            ContentValues tempCv = DbManagerSingleton.getContentValues(CatDbSchema.CatsTable.Cols.ColNames, catValues);
+            result = singleton.insert(CatDbSchema.CatsTable.NAME, tempCv);
+            tempCv = DbManagerSingleton.getContentValues(CatDbSchema.CatsTable.Cols.ColNames, catValues);
+            result = singleton.insert(CatDbSchema.CatsTable.NAME, tempCv);
+            System.out.println("Cat Insertion = " + result);
+
+            //print inserted cat
+            String queryStr = "SELECT * FROM " + CatDbSchema.CatsTable.NAME + " WHERE _id = ? ";
+            String[] whereArgs = new String[] {result + ""};
+            Cursor cursor = new CursorWrapper(singleton.query(queryStr, whereArgs));
+            Cat cat = Cat.getCats(cursor).get(0);
+            System.out.println(cat.getId() + " " + cat.getEnergy() + " " + cat.getMood() + " " + cat.getLasttimeEnergyConsume() +
+            cat.getUser_id());
 
         } else if ((username.equals("")) || (password.equals("")) || (confirm.equals(""))) {
             accountErrorDialog("Missing entry");

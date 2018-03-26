@@ -47,6 +47,10 @@ public class Cat {
         return this.mood;
     }
 
+    public int getStemina() {
+        return this.stemina;
+    }
+
     public int getCharacteristic() {
         return this.characteristic;
     }
@@ -70,27 +74,58 @@ public class Cat {
     public static List<Cat> getCats(Cursor cursor){
         List<Cat> list = new ArrayList<Cat>();
         cursor.moveToFirst();
-        SimpleDateFormat fmt = new SimpleDateFormat("DD-MM-YYYY HH:MM:SS");
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+
+        String[] str = cursor.getColumnNames();
+        for(int i = 0; i < cursor.getColumnCount(); i++){
+            System.out.println(i + " " + str[i]);
+        }
+
         while(!cursor.isAfterLast()){
             Date dt = new Date();
             try{
-                dt = fmt.parse(cursor.getString(8));
+                dt = fmt.parse(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.lasttime_energy_consume)));
             }catch(Exception e){
                 e.printStackTrace();
             }
 
-            Cat cat = new Cat(Integer.parseInt(cursor.getString(0)),
-                    cursor.getString(1), Integer.parseInt(cursor.getString(2)),
-                    Integer.parseInt(cursor.getString(3)),
-                    Integer.parseInt(cursor.getString(4)),
-                    Integer.parseInt(cursor.getString(5)),
-                    Integer.parseInt(cursor.getString(6)),
-                    Integer.parseInt(cursor.getString(7)),
+            Cat cat = new Cat(Integer.parseInt(cursor.getString(cursor.getColumnIndex("_id"))),
+                    cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.name)),
+                    Integer.parseInt(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.energy))),
+                    Integer.parseInt(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.mood))),
+                    Integer.parseInt(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.stemina))),
+                    Integer.parseInt(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.characteristic))),
+                    Integer.parseInt(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.stripe_type))),
+                    Integer.parseInt(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.fur_color))),
                     dt,
-                    Integer.parseInt(cursor.getString(9)));
+                    Integer.parseInt(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.user_id))));
             list.add(cat);
             cursor.moveToNext();
         }
-        return null;
+        return list;
+    }
+
+    public boolean updateEnergy(){
+        boolean updated = false;
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        try{
+            long lastTime = this.lasttime_energy_consume.getTime();
+            Date date = new Date();
+            long now = date.getTime();
+            long minutes = (now - lastTime) / (1000 * 60);
+            System.out.println("MMMMMMM = " + minutes);
+            if(minutes >= 1){
+                this.energy -= minutes;
+                if(this.energy < 0){
+                    this.energy = 0;
+                }
+                this.lasttime_energy_consume = date;
+                updated = true;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return updated;
     }
 }

@@ -1,22 +1,17 @@
 package com.example.nbnbzero.nekopapa;
 
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback{
 
@@ -35,8 +30,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
        gpsTracker = new GPSTracker(getApplicationContext());
        mLocation = gpsTracker.getLocation();
 
-        latitude = mLocation.getLatitude();
-        longitude = mLocation.getLongitude();
+        latitude = 50;//mLocation.getLatitude();
+        longitude = 50;//mLocation.getLongitude();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

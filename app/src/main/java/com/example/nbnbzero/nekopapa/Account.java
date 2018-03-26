@@ -2,6 +2,7 @@ package com.example.nbnbzero.nekopapa;
 
 import android.database.Cursor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * Retrieved from: web.cse.ohio-state.edu/~champion.17/5236/TicTacToeNew.zip
  */
 
-public class Account {
+public class Account implements Serializable{
     private int id;
     private String mName;
     private String mPassword;
@@ -32,6 +33,18 @@ public class Account {
 
     public String getPassword() {
         return mPassword;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.mName = name;
+    }
+
+    public void setPassword(String password) {
+        this.mPassword = password;
     }
 
     public static List<Account> getAccounts(Cursor cursor){

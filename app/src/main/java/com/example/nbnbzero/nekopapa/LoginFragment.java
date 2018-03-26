@@ -69,10 +69,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
         if(cursor.getCount() > 0){
             cursor.moveToNext();
-            System.out.println("USER_NAME ============== " + cursor.getString(cursor.getColumnIndex("_id")));
+            Account acc = Account.getAccounts(cursor).get(0);
             toastMessage("Logged in successfully");
             getActivity().finish();
-            startActivity(new Intent(getActivity(), GameSessionActivity.class));
+            Intent tempIntent = new Intent(getActivity(), GameSessionActivity.class);
+            tempIntent.putExtra("user_id", acc);
+            startActivity(tempIntent);
         }else{
             toastMessage("User does not exist OR Password is wrong");
         }

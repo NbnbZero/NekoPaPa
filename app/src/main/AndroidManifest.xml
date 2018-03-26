@@ -29,14 +29,14 @@
 
 
 
-        <!--  <activity android:name=".LoginActivity">
+          <activity android:name=".LoginActivity">
               <intent-filter>
                   <action android:name="android.intent.action.MAIN" />
                   <category android:name="android.intent.category.LAUNCHER" />
               </intent-filter>
           </activity>
           <activity android:name=".GameSessionActivity" />
-        -->
+
 
           <!--
                The API key for Google Maps-based APIs is defined as a string resource.
@@ -45,8 +45,9 @@
                You need a different API key for each encryption key, including the release key that is used to
                sign the APK for publishing.
                You can define the keys for the debug and release targets in src/debug/ and src/release/.
-          -->
+        -->
 
+        <!--
 
             <meta-data
                 android:name="com.google.android.geo.API_KEY"
@@ -61,6 +62,7 @@
             </intent-filter>
 
         </activity>
+        -->
 
     </application>
 
