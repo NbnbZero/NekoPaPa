@@ -36,7 +36,7 @@ public class WildCatDialogFragment extends DialogFragment {
                                 WildCat wc = UserData.wildCatList[(int)UserData.currentMarker.getZIndex()];
                                 if(distance > 20){
                                     UserData.toastMessage("It's Too Far Away!", context);
-                                //    return;
+                                    return;
                                 }
 
                                 Boolean result = cat.mateWithWildCat(wc, context);
