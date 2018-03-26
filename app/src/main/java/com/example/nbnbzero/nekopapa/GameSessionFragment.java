@@ -1,5 +1,6 @@
 package com.example.nbnbzero.nekopapa;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.graphics.Bitmap;
@@ -111,6 +112,9 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
                     updateAndDisplayCatData();
                     currentCatId = 0;
                 }
+                break;
+            case R.id.goto_map_button:
+                startActivity(new Intent(getActivity(), MapsActivity.class));
                 break;
             case R.id.next_cat_button:
                 nextCatIndex();
