@@ -7,6 +7,8 @@
         android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.MAPS_RECEIVE" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="15"/>
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -28,7 +30,7 @@
 
 
 
-
+<!--
           <activity android:name=".LoginActivity">
               <intent-filter>
                   <action android:name="android.intent.action.MAIN" />
@@ -38,7 +40,7 @@
           <activity android:name=".GameSessionActivity" />
 
 
-          <!--
+
                The API key for Google Maps-based APIs is defined as a string resource.
                (See the file "res/values/google_maps_api.xml").
                Note that the API key is linked to the encryption key used to sign the APK.
@@ -47,22 +49,20 @@
                You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
 
-        <!--
+
 
             <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyBCREM1n7IZYBt9-RSNF9-FYiX8MNnuajo"/>
+                android:value="@string/google_maps_key"/>
 
         <activity android:name=".MapsActivity"
                 android:label="Map">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        -->
+
 
     </application>
 
