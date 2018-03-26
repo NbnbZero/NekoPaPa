@@ -135,10 +135,18 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
     }
 
     private void setGauge(float perc){
+        if(perc == 0){
+            perc = .01f;
+        }
         Matrix matrix = new Matrix();
         matrix.postScale(perc, 1f);
 
+
         int width = gaugeView.getLayoutParams().width;
+        if(width == 0){
+            width = 1;
+        }
+
         int gaugeHeight = gaugeView.getLayoutParams().height;
 
         Bitmap newBitmap = Bitmap.createBitmap(gaugeBitmap, 0, 0, width, gaugeHeight, matrix, true);
@@ -175,6 +183,10 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
                     String[] whereArgs = {cat.getId() + ""};
                     int rows = singleton.update(CatDbSchema.CatsTable.NAME, tempCv, whereClause, whereArgs);
                     System.out.println("CAT UPDATED = " + rows);
+
+                    System.out.println("Gauge PPPPPPPPPP = " + ((float)cat.getEnergy() / (float)(cat.getStemina() * 25)));
+                    System.out.println(cat.getEnergy() + " " + (float)(cat.getStemina() * 25));
+                    setGauge((float)cat.getEnergy() / (float)(cat.getStemina() * 25));
                 }
             }
         });

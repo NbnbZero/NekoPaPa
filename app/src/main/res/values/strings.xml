@@ -26,5 +26,6 @@
     <string name="energy_label">Energy</string>
     <string name="gauge">Gauge</string>
     <string name="mood_label">Mood</string>
-
+    <string name="next_cat">Next</string>
+    <string name="previous_cat">Previous</string>
 </resources>
