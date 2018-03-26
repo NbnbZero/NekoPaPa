@@ -109,6 +109,7 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
                     acc.setGold(acc.getGold() + price);
                     updateUserDisplay();
                     updateAndDisplayCatData();
+                    currentCatId = 0;
                 }
                 break;
             case R.id.next_cat_button:
