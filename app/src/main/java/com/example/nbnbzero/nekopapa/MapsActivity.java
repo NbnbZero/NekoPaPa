@@ -28,6 +28,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private GPSTracker gpsTracker;
     private Location mLocation;
+    private Marker me;
     double catLat, catLong;
     double rangeMin = -0.0008;
     double rangeMax = 0.0008;
@@ -60,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng myloc = new LatLng(latitude,longitude);
-        mMap.addMarker(new MarkerOptions().position(myloc).title("I'm here..."));
+        me = mMap.addMarker(new MarkerOptions().position(myloc).title("I'm here..."));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(myloc));
 
         Random r = new Random();
@@ -73,24 +74,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Bitmap b = setGauge(result);
             Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(catLoc)
-                    .title("Wild Cat")
-                    .icon(BitmapDescriptorFactory.fromBitmap(b))
-                    .snippet(wildCat[i].getFur_color()
-                            +"\n"+wildCat[i].getStripe_type()
-                            +"\n"+wildCat[i].getCharacteristic()
-                            +"\n"+wildCat[i].getStemina()));
+                    .icon(BitmapDescriptorFactory.fromBitmap(b)));
 
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    FragmentManager manager = getFragmentManager();
-                    WildCatDialogFragment fragment = new WildCatDialogFragment();
+                    if(marker != me) {
+                        FragmentManager manager = getFragmentManager();
+                        WildCatDialogFragment fragment = new WildCatDialogFragment();
 
-                    Bundle args = new Bundle();
-                    fragment.setArguments(args);
-                    fragment.show(manager, "dialog");
-
+                        Bundle args = new Bundle();
+                        fragment.setArguments(args);
+                        fragment.show(manager, "dialog");
+                    }
                     return true;
                 }
             });
