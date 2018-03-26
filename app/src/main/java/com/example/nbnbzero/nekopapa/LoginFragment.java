@@ -74,6 +74,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             getActivity().finish();
             Intent tempIntent = new Intent(getActivity(), GameSessionActivity.class);
             tempIntent.putExtra("user_id", acc);
+            acc.updateLoginDateAndGold();
+            acc.updateAccountToDB(getActivity());
             startActivity(tempIntent);
         }else{
             toastMessage("User does not exist OR Password is wrong");

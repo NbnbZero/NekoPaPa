@@ -12,8 +12,10 @@ public class AccountDbSchema {
         public static final class Cols {
             public static final String NAME = "name";
             public static final String PASSWORD = "password";
+            public static final String GOLD = "gold";
+            public static final String LAST_LOGIN = "last_login";
 
-            public static final String[] ColNames = {NAME, PASSWORD};
+            public static final String[] ColNames = {NAME, PASSWORD, GOLD, LAST_LOGIN};
         }
 
     }

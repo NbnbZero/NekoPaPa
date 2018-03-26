@@ -30,7 +30,7 @@ public class GameSessionActivity extends SingleFragmentActivity{
                 count++;
                 sendDataToFragment();
             }
-        }, 1 * 5 * 500, 1 * 10 * 500);
+        }, 100, 100);
 
     }
 

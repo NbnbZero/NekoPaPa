@@ -1,5 +1,7 @@
 package com.example.nbnbzero.nekopapa;
 
+import android.app.Activity;
+import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.text.SimpleDateFormat;
@@ -71,15 +73,17 @@ public class Cat {
         return this.user_id;
     }
 
+    public void setEnergy(int energy) {
+        if(energy >= this.stemina * 25){
+            energy = this.stemina * 25;
+        }
+        this.energy = energy;
+    }
+
     public static List<Cat> getCats(Cursor cursor){
         List<Cat> list = new ArrayList<Cat>();
         cursor.moveToFirst();
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-
-        String[] str = cursor.getColumnNames();
-        for(int i = 0; i < cursor.getColumnCount(); i++){
-            System.out.println(i + " " + str[i]);
-        }
 
         while(!cursor.isAfterLast()){
             Date dt = new Date();
@@ -105,7 +109,7 @@ public class Cat {
         return list;
     }
 
-    public boolean updateEnergy(){
+    public boolean updateEnergyMood(){
         boolean updated = false;
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         try{
@@ -113,12 +117,26 @@ public class Cat {
             Date date = new Date();
             long now = date.getTime();
             long minutes = (now - lastTime) / (1000 * 60);
-            System.out.println("MMMMMMM = " + minutes);
             if(minutes >= 1){
+                //update energy
                 this.energy -= minutes;
                 if(this.energy < 0){
                     this.energy = 0;
                 }
+                //update mood
+                int[] moodType = moodProbability(characteristic);
+                int d = (int) (Math.random() * 100);
+                if(d <= moodType[0]){
+                    this.mood = 1;
+                }else if(d <= moodType[1]){
+                    this.mood = 2;
+                }else{
+                    this.mood = 3;
+                }
+                if(this.energy < 5){
+                    this.mood = 1;
+                }
+                //set update time
                 this.lasttime_energy_consume = date;
                 updated = true;
             }
@@ -127,5 +145,70 @@ public class Cat {
         }
 
         return updated;
+    }
+
+    private int[] moodProbability(int chara){
+        int[] result = {0, 0};
+        switch(chara){
+            case 1:
+                result[0] = 50;
+                result[1] = 70;
+                break;
+            case 2:
+                result[0] = 20;
+                result[1] = 70;
+                break;
+            case 3:
+                result[0] = 20;
+                result[1] = 50;
+                break;
+        }
+        return result;
+    }
+
+    public static String moodName(int i){
+        String moodNa = "";
+        switch(i){
+            case 1:
+                moodNa = "Angry";
+                break;
+            case 2:
+                moodNa = "Calm";
+                break;
+            case 3:
+                moodNa = "Happy";
+                break;
+        }
+        return moodNa;
+    }
+
+    public String[] dataArray(){
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        String[] temp = {name, energy + "", mood + "", stemina + "", characteristic + "",
+                stripe_type + "", fur_color + "", fmt.format(lasttime_energy_consume),
+        user_id + ""};
+        return temp;
+    }
+
+    public int updateCatToDB(Activity activity){
+        DbManagerSingleton singleton = DbManagerSingleton.get(activity);
+        ContentValues tempCv = DbManagerSingleton.getContentValues(CatDbSchema.CatsTable.Cols.ColNames, dataArray());
+        String whereClause = "_id = ?";
+        String[] whereArgs = {id + ""};
+        int rows = singleton.update(CatDbSchema.CatsTable.NAME, tempCv, whereClause, whereArgs);
+        System.out.println("Cat " + id + " updated!");
+        return rows;
+    }
+
+    public int deleteCatInDB(Activity activity){
+        DbManagerSingleton singleton = DbManagerSingleton.get(activity);
+        String whereClause = "_id = ?";
+        String[] whereArgs = {id + ""};
+        int rows = singleton.delete(CatDbSchema.CatsTable.NAME, whereClause, whereArgs);
+        return rows;
+    }
+
+    public int catPrice(){
+        return stemina * 100 + characteristic * 100 + stripe_type * 500 + fur_color * 500;
     }
 }
