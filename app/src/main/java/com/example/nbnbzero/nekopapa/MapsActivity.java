@@ -32,7 +32,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     double catLat, catLong;
     double rangeMin = -0.0008;
     double rangeMax = 0.0008;
-    private WildCat[] wildCat = {new WildCat(1, 2, 1, 3)};
+    private WildCat[] wildCat = new WildCat[20];
+    private int numWC = 20;
 
     double latitude, longitude;
 
@@ -64,12 +65,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         me = mMap.addMarker(new MarkerOptions().position(myloc));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(myloc));
 
-        Random r = new Random();
-        catLat = latitude + rangeMin + (rangeMax - rangeMin) * r.nextDouble();
-        catLong = longitude + rangeMin + (rangeMax - rangeMin) * r.nextDouble();
-        LatLng catLoc = new LatLng(catLat,catLong);
+        for(int i = 0; i<numWC; i++){
+            Random rc = new Random();
+            WildCat wc = new WildCat(1+rc.nextInt(4),1+rc.nextInt(3),1+rc.nextInt(3),1+rc.nextInt(3));
+            wildCat[i] = wc;
+        }
 
         for(int i = 0; i<wildCat.length;i++){
+
+            Random r = new Random();
+            catLat = latitude + rangeMin + (rangeMax - rangeMin) * r.nextDouble();
+            catLong = longitude + rangeMin + (rangeMax - rangeMin) * r.nextDouble();
+            LatLng catLoc = new LatLng(catLat,catLong);
+
             int result = catImgR(wildCat[i]);
             Bitmap b = setGauge(result);
             Marker marker = mMap.addMarker(new MarkerOptions()
