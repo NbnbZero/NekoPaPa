@@ -1,12 +1,19 @@
+/*
+* Created by NbnbZero and TeriyakiMayo on 3/26/2018.
+*
+**/
+
 package com.example.nbnbzero.nekopapa;
 
 import android.app.FragmentManager;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,7 +32,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private GPSTracker gpsTracker;
     private Location mLocation;
-    private Marker me;
     double catLat, catLong;
     double rangeMin = -0.0008;
     double rangeMax = 0.0008;
@@ -54,20 +60,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if(ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        }
         LatLng myloc = new LatLng(latitude,longitude);
-        me = mMap.addMarker(new MarkerOptions().position(myloc));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(myloc));
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if(!marker.equals(me)) {
-                    FragmentManager manager = getFragmentManager();
-                    WildCatDialogFragment fragment = new WildCatDialogFragment();
-                    UserData.currentMarker = marker;
-                    fragment.show(manager, "dialog");
-                }
+                FragmentManager manager = getFragmentManager();
+                WildCatDialogFragment fragment = new WildCatDialogFragment();
+                UserData.currentMarker = marker;
+                fragment.show(manager, "dialog");
                 return true;
             }
         });

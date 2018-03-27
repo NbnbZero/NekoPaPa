@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 /**
- * Created by lingchen on 3/26/18.
+ *
+ * Created by NbnbZero and TeriyakiMayo on 3/26/2018.
+ *
  */
 
 public class WildCatDialogFragment extends DialogFragment {

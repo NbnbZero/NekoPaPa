@@ -1,6 +1,8 @@
+/*
+*   Created by NbnbZero and TeriyakiMayo on 3/26/2018.
+*   Reference to https://www.youtube.com/watch?v=LhpDnKJpgTU
+*/
 package com.example.nbnbzero.nekopapa;
-
-import android.*;
 import android.Manifest;
 import android.app.Service;
 import android.content.Context;
@@ -70,7 +72,7 @@ public class GPSTracker extends Service implements LocationListener{
         return location;
     }
     public void onLocationChanged(Location location){
-
+        getLocation();
     }
 
     public void onStatusChanged(String Provider, int status, Bundle extras){

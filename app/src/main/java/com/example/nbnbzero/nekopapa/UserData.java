@@ -10,9 +10,10 @@ import com.google.android.gms.maps.model.Marker;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by tianz on 3/26/2018.
- */
+/*
+* Created by NbnbZero and TeriyakiMayo on 3/26/2018.
+*
+**/
 
 public class UserData {
     public static Account currentUser = null;

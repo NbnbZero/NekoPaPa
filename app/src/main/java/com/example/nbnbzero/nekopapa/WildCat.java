@@ -1,8 +1,9 @@
 package com.example.nbnbzero.nekopapa;
 
-/**
- * Created by lingchen on 3/26/18.
- */
+/*
+* Created by NbnbZero and TeriyakiMayo on 3/26/2018.
+*
+**/
 
 public class WildCat {
     private int stemina, characteristic, stripe_type, fur_color;

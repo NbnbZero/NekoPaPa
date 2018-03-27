@@ -1,8 +1,9 @@
 package com.example.nbnbzero.nekopapa;
 
-/**
- * Created by tianz on 3/25/2018.
- */
+/*
+* Created by NbnbZero and TeriyakiMayo on 3/26/2018.
+*
+**/
 
 public class InventoryDbSchema {
     public static final class InventoryTable {
