@@ -239,6 +239,7 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
         getActivity().runOnUiThread(new Runnable(){
             @Override
             public void run(){
+                System.out.println("UPPPPPPPPPPPPPPPP");
                 Cat cat = catList.get(UserData.currentCatId);
                 boolean updated = cat.updateEnergyMood();
                 if(updated){
