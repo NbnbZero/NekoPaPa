@@ -13,33 +13,27 @@ import java.util.TimerTask;
  */
 
 public class GameSessionActivity extends SingleFragmentActivity{
-    static int count = 2;
-    GameSessionFragment frag = null;
+    GameSessionFragment gameSessionFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        Timer mytime = new Timer();
-        mytime.scheduleAtFixedRate(new TimerTask(){
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask(){
             @Override
             public void run(){
-                count++;
-                sendDataToFragment();
+                if(gameSessionFragment != null){
+                    gameSessionFragment.updateGauge();
+                }
             }
         }, 100, 100);
 
     }
 
-    public void sendDataToFragment(){
-        if(frag != null){
-            frag.updateGauge();
-        }
-    }
-
     @Override
     protected Fragment createFragment() {
-        frag = new GameSessionFragment();
-        return frag;
+        gameSessionFragment = new GameSessionFragment();
+        return gameSessionFragment;
     }
 }
