@@ -36,7 +36,7 @@ public class WildCatDialogFragment extends DialogFragment {
                                 int distance = (int) UserData.distanceToTarget(UserData.currentMarker.getPosition(), getActivity().getApplicationContext());
                                 Cat cat = UserData.catList.get(UserData.currentCatId);
                                 WildCat wc = UserData.wildCatList[(int)UserData.currentMarker.getZIndex()];
-                                if(distance > 20){
+                                if(distance > 50){
                                     UserData.toastMessage("It's Too Far Away!", context);
                                     return;
                                 }
