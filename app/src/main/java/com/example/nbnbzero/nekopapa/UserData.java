@@ -33,6 +33,12 @@ public class UserData {
     public static GPSTracker gpsTracker = null;
 
     public static void updateWildCatListAccordingToCurrtPosit(Context context, GoogleMap map){
+        GPSTracker gpsTracker = new GPSTracker(context);
+        Location mLocation = gpsTracker.getLocation();
+        if(mLocation == null){
+            return;
+        }
+        
         if(wildCatList == null){
             generateWildCatList(context);
         }else{
@@ -141,8 +147,14 @@ public class UserData {
     public static LatLng myLocation(Context context){
         GPSTracker gpsTracker = new GPSTracker(context);
         Location mLocation = gpsTracker.getLocation();
-        double latitude = mLocation.getLatitude();
-        double longitude = mLocation.getLongitude();
+        double latitude = 0;
+        double longitude = 0;
+        if(mLocation != null){
+            latitude = mLocation.getLatitude();
+            longitude = mLocation.getLongitude();
+        }else{
+            toastMessage("GPS not applicable", context);
+        }
         return new LatLng(latitude,longitude);
     }
 
