@@ -35,4 +35,6 @@
     <string name="mood_label">Mood</string>
     <string name="next_cat">Next</string>
     <string name="previous_cat">Previous</string>
+
+    <string name="back_to_gamesession">Back</string>
 </resources>

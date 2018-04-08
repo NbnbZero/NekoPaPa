@@ -17,13 +17,12 @@ import java.util.concurrent.TimeUnit;
 public class Cat {
     private static final int minMateEnergy = 10;
 
-    private String name;
+    private String name, lasttime_energy_consume;
     private int id, energy, mood, stemina, characteristic, stripe_type,
             fur_color, user_id;
-    private Date lasttime_energy_consume;
 
     public Cat(int id, String name, int energy, int mood, int stemina, int characteristic, int stripe_type,
-               int fur_color, Date lasttime_energy_consume, int user_id) {
+               int fur_color, String lasttime_energy_consume, int user_id) {
         this.id = id;
         this.name = name;
         this.energy = energy;
@@ -68,7 +67,7 @@ public class Cat {
         return this.fur_color;
     }
 
-    public Date getLasttimeEnergyConsume() {
+    public String getLasttimeEnergyConsume() {
         return this.lasttime_energy_consume;
     }
 
@@ -84,17 +83,10 @@ public class Cat {
     }
 
     public static List<Cat> getCats(Cursor cursor){
-        List<Cat> list = new ArrayList<Cat>();
+        List<Cat> list = new ArrayList<>();
         cursor.moveToFirst();
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
         while(!cursor.isAfterLast()){
-            Date dt = new Date();
-            try{
-                dt = fmt.parse(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.lasttime_energy_consume)));
-            }catch(Exception e){
-                e.printStackTrace();
-            }
 
             Cat cat = new Cat(Integer.parseInt(cursor.getString(cursor.getColumnIndex("_id"))),
                     cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.name)),
@@ -104,7 +96,7 @@ public class Cat {
                     Integer.parseInt(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.characteristic))),
                     Integer.parseInt(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.stripe_type))),
                     Integer.parseInt(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.fur_color))),
-                    dt,
+                    cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.lasttime_energy_consume)),
                     Integer.parseInt(cursor.getString(cursor.getColumnIndex(CatDbSchema.CatsTable.Cols.user_id))));
             list.add(cat);
             cursor.moveToNext();
@@ -116,17 +108,16 @@ public class Cat {
         boolean updated = false;
         SimpleDateFormat fmt = DateManager.fmt;
         try{
-            long lastTime = this.lasttime_energy_consume.getTime();
+            long lastTime = fmt.parse(this.lasttime_energy_consume).getTime();
             Date date = new Date();
             long now = date.getTime();
-            long minutes = (now - lastTime) / (1000 * 60);
             long min = TimeUnit.MILLISECONDS.toMinutes(now - lastTime);
-            if(minutes >= 1){
+            if(min >= 1){
                 //update energy
-                System.out.println("Last = " + lastTime + " " + fmt.format(this.lasttime_energy_consume));
+                System.out.println("Last = " + lastTime + " " + this.lasttime_energy_consume);
                 System.out.println("Now = " + now + " " + fmt.format(date));
-                System.out.println("CURRRRRRRR ENERGY = " + this.energy + " minute = " + minutes + " " + min);
-                this.energy -= minutes;
+                System.out.println("CURRRRRRRR ENERGY = " + this.energy + " minute = " + min);
+                this.energy -= min;
                 if(this.energy < 0){
                     this.energy = 0;
                 }
@@ -144,7 +135,7 @@ public class Cat {
                     this.mood = 1;
                 }
                 //set update time
-                this.lasttime_energy_consume = date;
+                this.lasttime_energy_consume = fmt.format(date);
                 updated = true;
             }
         }catch(Exception e){
@@ -192,7 +183,7 @@ public class Cat {
     public String[] dataArray(){
         SimpleDateFormat fmt = DateManager.fmt;
         String[] temp = {name, energy + "", mood + "", stemina + "", characteristic + "",
-                stripe_type + "", fur_color + "", fmt.format(lasttime_energy_consume),
+                stripe_type + "", fur_color + "", lasttime_energy_consume,
         user_id + ""};
         return temp;
     }

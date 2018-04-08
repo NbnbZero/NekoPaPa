@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by NbnbZero and TeriyakiMayo on 2/20/2018.
@@ -22,9 +23,9 @@ public class Account implements Serializable{
     private String mName;
     private String mPassword;
     private int gold;
-    private Date lastLogin;
+    private String lastLogin;
 
-    public Account(int id, String name, String password, int gold, Date lastLogin) {
+    public Account(int id, String name, String password, int gold, String lastLogin) {
         this.id = id;
         mName = name;
         mPassword = password;
@@ -48,7 +49,7 @@ public class Account implements Serializable{
         return gold;
     }
 
-    public Date getLastLogin() {
+    public String getLastLogin() {
         return lastLogin;
     }
 
@@ -68,14 +69,14 @@ public class Account implements Serializable{
         this.gold = gold;
     }
 
-    public void setLastLogin(Date lastLogin) {
+    public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
     }
 
     public static List<Account> getAccounts(Cursor cursor){
-        List<Account> list = new ArrayList<Account>();
+        List<Account> list = new ArrayList<>();
         cursor.moveToFirst();
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        SimpleDateFormat fmt = DateManager.fmt;
         Date dt = new Date();
         try{
             dt = fmt.parse(cursor.getString(cursor.getColumnIndex(AccountDbSchema.AccountsTable.Cols.LAST_LOGIN)));
@@ -87,7 +88,7 @@ public class Account implements Serializable{
                     cursor.getString(cursor.getColumnIndex(AccountDbSchema.AccountsTable.Cols.NAME)),
                     cursor.getString(cursor.getColumnIndex(AccountDbSchema.AccountsTable.Cols.PASSWORD)),
                     Integer.parseInt(cursor.getString(cursor.getColumnIndex(AccountDbSchema.AccountsTable.Cols.GOLD))),
-                    dt
+                    cursor.getString(cursor.getColumnIndex(AccountDbSchema.AccountsTable.Cols.LAST_LOGIN))
                     );
                     list.add(account);
             cursor.moveToNext();
@@ -98,15 +99,15 @@ public class Account implements Serializable{
     public void updateLoginDateAndGold(){
         SimpleDateFormat fmt = DateManager.fmt;
         try{
-            long lastTime = this.lastLogin.getTime();
+            long lastTime = fmt.parse(this.lastLogin).getTime();
             Date date = new Date();
             long now = date.getTime();
-            long minutes = (now - lastTime) / (1000 * 60);
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(now - lastTime);
             if(minutes >= 1){
                 System.out.println("ACCCCCCCCCOUNT MIN = " + minutes);
                 this.gold += 100;
             }
-            this.lastLogin = date;
+            this.lastLogin = fmt.format(date);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -114,7 +115,7 @@ public class Account implements Serializable{
 
     public String[] dataArray(){
         SimpleDateFormat fmt = DateManager.fmt;
-        String[] temp = {mName, mPassword, gold + "", fmt.format(lastLogin)};
+        String[] temp = {mName, mPassword, gold + "", lastLogin};
         return temp;
     }
 

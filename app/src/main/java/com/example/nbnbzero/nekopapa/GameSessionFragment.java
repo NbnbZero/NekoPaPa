@@ -18,8 +18,6 @@ import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -117,6 +115,7 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
                 }
                 break;
             case R.id.goto_map_button:
+            //    getActivity().finish();
                 startActivity(new Intent(getActivity(), MapsActivity.class));
                 break;
             case R.id.next_cat_button:
@@ -238,14 +237,12 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
     }
 
     public void updateGauge(){
+        if(getActivity() == null || getActivity().isFinishing()){
+            return;
+        }
         getActivity().runOnUiThread(new Runnable(){
             @Override
             public void run(){
-                Date date = new Date();
-                Date date2 = new Date();
-                SimpleDateFormat fmt = DateManager.fmt;
-        //        System.out.println("UPPPPPPPPPPPPPPPP 1st " + fmt.format(date));
-        //        System.out.println("UPPPPPPPPPPPPPPPP 2nd " + fmt.format(date2));
                 Cat cat = catList.get(UserData.currentCatId);
                 boolean updated = cat.updateEnergyMood();
                 if(updated){
@@ -257,6 +254,27 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
                 catMoodView.setText(Cat.moodName(cat.getMood()));
             }
         });
+
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+/*
+        if(gaugeBitmap != null){
+            gaugeBitmap.recycle();
+            gaugeBitmap = null;
+        }
+
+        if(catView != null){
+            catView.destroyDrawingCache();
+            catView = null;
+        }
+*/
+/*
+        System.runFinalization();
+        Runtime.getRuntime().gc();
+        System.gc();*/
 
     }
 }

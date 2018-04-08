@@ -38,7 +38,7 @@ public class UserData {
         if(mLocation == null){
             return;
         }
-        
+
         if(wildCatList == null){
             generateWildCatList(context);
         }else{

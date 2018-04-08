@@ -76,4 +76,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        System.out.println("MAP Destroyed");
+
+    //    startActivity(new Intent(getApplicationContext(), GameSessionActivity.class));
+        /*
+        System.runFinalization();
+        Runtime.getRuntime().gc();
+        System.gc();
+        */
+    }
+
 }

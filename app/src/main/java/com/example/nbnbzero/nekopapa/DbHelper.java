@@ -14,7 +14,7 @@ import com.example.nbnbzero.nekopapa.AccountDbSchema.AccountsTable;
 public class DbHelper extends SQLiteOpenHelper {
     private Context mContext;
     private static final String DATABASE_NAME = "NekoPaPa.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 11;
 
     // Class name for logging.
     private final String TAG = getClass().getSimpleName();
@@ -30,7 +30,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 AccountsTable.Cols.NAME + " TEXT UNIQUE, " +
                 AccountsTable.Cols.PASSWORD + " TEXT, " +
                 AccountsTable.Cols.GOLD + " INTEGER NOT NULL DEFAULT 0, " +
-                AccountsTable.Cols.LAST_LOGIN + " DATETIME NOT NULL " +
+                AccountsTable.Cols.LAST_LOGIN + " TEXT NOT NULL " +
                 ")");
 
         sqLiteDatabase.execSQL("CREATE TABLE " + CatDbSchema.CatsTable.NAME + "(" +
@@ -43,7 +43,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 CatDbSchema.CatsTable.Cols.stripe_type + " INTEGER  NOT NULL DEFAULT 1, " +
                 CatDbSchema.CatsTable.Cols.fur_color + " INTEGER  NOT NULL DEFAULT 1, " +
                 CatDbSchema.CatsTable.Cols.user_id + " INTEGER, " +
-                CatDbSchema.CatsTable.Cols.lasttime_energy_consume + " DATETIME NOT NULL, " +
+                CatDbSchema.CatsTable.Cols.lasttime_energy_consume + " TEXT NOT NULL, " +
                 "FOREIGN KEY (" + CatDbSchema.CatsTable.Cols.user_id + ") REFERENCES " + AccountsTable.NAME + "(_id)" +
                 ")");
 

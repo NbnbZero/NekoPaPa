@@ -29,7 +29,15 @@ public class DbManagerSingleton {
     }
 
     public Cursor query(String queryStr, String[] args){
-        return mDatabase.rawQuery(queryStr, args);
+        Cursor cursor = null;
+        mDatabase.beginTransaction();
+        try {
+            cursor = mDatabase.rawQuery(queryStr, args);
+            mDatabase.setTransactionSuccessful();
+        }finally {
+            mDatabase.endTransaction();
+        }
+        return cursor;
     }
 
     public long insert(String table, ContentValues cv){
