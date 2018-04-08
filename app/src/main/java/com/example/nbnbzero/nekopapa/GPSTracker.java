@@ -3,6 +3,7 @@
 *   Reference to https://www.youtube.com/watch?v=LhpDnKJpgTU
 */
 package com.example.nbnbzero.nekopapa;
+
 import android.Manifest;
 import android.app.Service;
 import android.content.Context;
@@ -28,6 +29,8 @@ public class GPSTracker extends Service implements LocationListener{
     
     Location location;
     protected LocationManager locationManager;
+
+    private MapsActivity mapsActivity;
 
     public GPSTracker (Context context){
         this.context = context;
@@ -69,10 +72,23 @@ public class GPSTracker extends Service implements LocationListener{
         }catch(Exception ex){
 
         }
+        
         return location;
+
     }
+
     public void onLocationChanged(Location location){
+        System.out.println("CHANGED " + mapsActivity);
+        if(mapsActivity != null){
+
+            mapsActivity.updateWildCats();
+        }
+
         getLocation();
+    }
+
+    public void setMapsActivity(MapsActivity mapsActivity){
+        this.mapsActivity = mapsActivity;
     }
 
     public void onStatusChanged(String Provider, int status, Bundle extras){
