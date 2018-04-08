@@ -75,7 +75,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
             //setup user data
             UserData.currentUser = acc;
-            UserData.generateWildCatList();
             acc.updateLoginDateAndGold();
             acc.updateAccountToDB(getActivity());
 

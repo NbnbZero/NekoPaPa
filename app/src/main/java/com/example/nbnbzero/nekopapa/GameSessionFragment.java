@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -239,7 +241,11 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
         getActivity().runOnUiThread(new Runnable(){
             @Override
             public void run(){
-                System.out.println("UPPPPPPPPPPPPPPPP");
+                Date date = new Date();
+                Date date2 = new Date();
+                SimpleDateFormat fmt = DateManager.fmt;
+        //        System.out.println("UPPPPPPPPPPPPPPPP 1st " + fmt.format(date));
+        //        System.out.println("UPPPPPPPPPPPPPPPP 2nd " + fmt.format(date2));
                 Cat cat = catList.get(UserData.currentCatId);
                 boolean updated = cat.updateEnergyMood();
                 if(updated){

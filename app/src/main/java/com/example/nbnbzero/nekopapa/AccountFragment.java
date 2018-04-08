@@ -115,6 +115,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             System.out.println("Account Insertion = " + result);
 
             //create cat for new account
+
+
             int user_id = (int)result;
             String[] catValues = {username + "'s cat", "25", "3", "1", "1", "1", "1", fmt.format(date), user_id + ""};
             String[] catValues2 = {username + "'s cat2", "25", "3", "1", "1", "2", "2", fmt.format(date), user_id + ""};
