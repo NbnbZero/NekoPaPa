@@ -35,21 +35,20 @@ public class UserData {
     public static void updateWildCatListAccordingToCurrtPosit(Context context, GoogleMap map){
         if(wildCatList == null){
             generateWildCatList(context);
-            createWildCatMarkers(map, context);
         }else{
             boolean existsApplicableWildCat = false;
             for(WildCat cat: wildCatList){
                 LatLng latLng = new LatLng(cat.getLat(), cat.getLongi());
                 if(distanceToTarget(latLng, context) <= wildCatRespawnDistance){
                     existsApplicableWildCat = true;
+                    break;
                 }
             }
             if(!existsApplicableWildCat){
                 generateWildCatList(context);
-                createWildCatMarkers(map, context);
             }
         }
-
+        createWildCatMarkers(map, context);
 
     }
 
