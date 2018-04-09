@@ -19,8 +19,6 @@ public class LoginFragmentTest extends ActivityInstrumentationTestCase2<LoginAct
     private EditText mPasswordEditText;
     Button loginButton;
 
-    String packageName = "";
-
     public LoginFragmentTest(){
         super(LoginActivity.class);
 
@@ -46,7 +44,6 @@ public class LoginFragmentTest extends ActivityInstrumentationTestCase2<LoginAct
         mPasswordEditText = (EditText) v.findViewById(R.id.password_text);
         loginButton = (Button) v.findViewById(R.id.login_button);
 
-        packageName = getActivity().getPackageName();
     }
 
 
@@ -64,10 +61,7 @@ public class LoginFragmentTest extends ActivityInstrumentationTestCase2<LoginAct
     public void testLoginFailure(){
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
-                System.out.println("mUsernameEditText = " + mUsernameEditText.getText());
-
                 mUsernameEditText.setText("a");
-                System.out.println("mUsernameEditText = " + mUsernameEditText.getText());
 
                 mPasswordEditText.setText("b");
 
@@ -84,7 +78,6 @@ public class LoginFragmentTest extends ActivityInstrumentationTestCase2<LoginAct
     public void testLoginSuccess(){
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
-
                 mUsernameEditText.setText("a");
 
                 mPasswordEditText.setText("a");
