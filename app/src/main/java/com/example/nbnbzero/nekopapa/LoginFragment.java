@@ -34,10 +34,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        String phoneNum = "123-456-7890";
-        phoneNum = phoneNum.trim();
-        System.out.println(phoneNum);
-        System.out.println("LoginFragment onCreateView");
         View v = inflater.inflate(R.layout.login, container, false);
 
         mUsernameEditText = (EditText) v.findViewById(R.id.username_text);
@@ -108,13 +104,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     public void onPause(){
         super.onPause();
-        System.out.println("LoginFragment onPause");
     }
 
     public void onResume(){
-        System.out.println("LoginFragment right before onResume");
         super.onResume();
-        System.out.println("LoginFragment onResume");
     }
 
 

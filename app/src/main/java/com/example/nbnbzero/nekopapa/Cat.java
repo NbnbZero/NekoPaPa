@@ -114,9 +114,6 @@ public class Cat {
             long min = TimeUnit.MILLISECONDS.toMinutes(now - lastTime);
             if(min >= 1){
                 //update energy
-                System.out.println("Last = " + lastTime + " " + this.lasttime_energy_consume);
-                System.out.println("Now = " + now + " " + fmt.format(date));
-                System.out.println("CURRRRRRRR ENERGY = " + this.energy + " minute = " + min);
                 this.energy -= min;
                 if(this.energy < 0){
                     this.energy = 0;
@@ -194,7 +191,6 @@ public class Cat {
         String whereClause = "_id = ?";
         String[] whereArgs = {id + ""};
         int rows = singleton.update(CatDbSchema.CatsTable.NAME, tempCv, whereClause, whereArgs);
-        System.out.println("Cat " + id + " updated!");
         return rows;
     }
 

@@ -78,7 +78,6 @@ public class GPSTracker extends Service implements LocationListener{
     }
 
     public void onLocationChanged(Location location){
-        System.out.println("CHANGED " + mapsActivity);
         if(mapsActivity != null){
 
             mapsActivity.updateWildCats();

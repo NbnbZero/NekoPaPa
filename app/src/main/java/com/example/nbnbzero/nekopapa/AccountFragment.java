@@ -29,7 +29,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private EditText mEtUsername;
     private EditText mEtPassword;
     private EditText mEtConfirm;
-    private DbHelper mDbHelper;
 
     private final String TAG = getClass().getSimpleName();
 
@@ -90,7 +89,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void createAccount() {
+    public boolean createAccount() {
+        boolean createSuccessful = false;
         //this.output = (TextView) this.findViewById(R.id.out_text);
         String username = mEtUsername.getText().toString();
         String password = mEtPassword.getText().toString();
@@ -107,12 +107,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             long result = singleton.insert(AccountDbSchema.AccountsTable.NAME,
                     DbManagerSingleton.getContentValues(AccountDbSchema.AccountsTable.Cols.ColNames, values));
             if(result >= 0) {
+                createSuccessful = true;
                 toastMessage("New record inserted");
                 getActivity().getSupportFragmentManager().popBackStack();
             }else{
                 accountErrorDialog("Record exists");
             }
-            System.out.println("Account Insertion = " + result);
 
             //create cat for new account
 
@@ -121,15 +121,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             String[] catValues2 = {username + "'s cat2", "25", "3", "1", "1", "2", "2", fmt.format(date), user_id + ""};
             result = Cat.insertCat(getActivity().getApplicationContext(), catValues);
             result = Cat.insertCat(getActivity().getApplicationContext(), catValues2);
-            System.out.println("Cat Insertion = " + result);
 
             //print inserted cat
             String queryStr = "SELECT * FROM " + CatDbSchema.CatsTable.NAME + " WHERE _id = ? ";
             String[] whereArgs = new String[] {result + ""};
             Cursor cursor = new CursorWrapper(singleton.query(queryStr, whereArgs));
             Cat cat = Cat.getCats(cursor).get(0);
-            System.out.println(cat.getId() + " " + cat.getEnergy() + " " + cat.getMood() + " " + cat.getLasttimeEnergyConsume() +
-            cat.getUser_id());
 
         } else if ((username.equals("")) || (password.equals("")) || (confirm.equals(""))) {
             accountErrorDialog("Missing entry");
@@ -138,6 +135,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         } else {
             Log.e(TAG, "An unknown account creation error occurred.");
         }
+
+        return createSuccessful;
     }
 
     private void toastMessage(String msg){

@@ -104,7 +104,6 @@ public class Account implements Serializable{
             long now = date.getTime();
             long minutes = TimeUnit.MILLISECONDS.toMinutes(now - lastTime);
             if(minutes >= 1){
-                System.out.println("ACCCCCCCCCOUNT MIN = " + minutes);
                 this.gold += 100;
             }
             this.lastLogin = fmt.format(date);
@@ -125,7 +124,6 @@ public class Account implements Serializable{
         String whereClause = "_id = ?";
         String[] whereArgs = {id + ""};
         int rows = singleton.update(AccountDbSchema.AccountsTable.NAME, tempCv, whereClause, whereArgs);
-        System.out.println("Account " + id + " updated!");
         return rows;
     }
 }

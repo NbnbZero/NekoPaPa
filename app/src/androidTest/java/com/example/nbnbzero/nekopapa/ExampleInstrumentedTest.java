@@ -23,4 +23,9 @@ public class ExampleInstrumentedTest {
 
         assertEquals("com.example.nbnbzero.nekopapa", appContext.getPackageName());
     }
+
+    @Test
+    public void addition_isCorrect() throws Exception {
+        assertEquals(4, 2 + 2);
+    }
 }

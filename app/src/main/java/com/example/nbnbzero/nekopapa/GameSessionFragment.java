@@ -27,12 +27,12 @@ import java.util.List;
  */
 
 public class GameSessionFragment extends Fragment implements View.OnClickListener {
-    TextView userGoldView;
-    AppCompatImageView catView;
-    TextView catNameView;
-    AppCompatImageView gaugeView;
+    private TextView userGoldView;
+    private AppCompatImageView catView;
+    private TextView catNameView;
+    private AppCompatImageView gaugeView;
     private Bitmap gaugeBitmap;
-    TextView catMoodView;
+    private TextView catMoodView;
 
     private String imageFilePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath() +
             File.separator + "gauge.png";
@@ -86,6 +86,9 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
     }
 
     public void onClick(View view) {
+        if(UserData.currentUser == null){
+            return;
+        }
         boolean displayChanged = false;
         Account acc;
         Cat cat;
@@ -133,7 +136,7 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
     }
 
     private void updateUserDisplay(){
-        if(userGoldView != null){
+        if(userGoldView != null && UserData.currentUser != null){
             GameSessionActivity activity = (GameSessionActivity) getActivity();
             userGoldView.setText("Gold " + UserData.currentUser.getGold());
         }
@@ -150,18 +153,17 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
     }
 
     private void updateAndDisplayCatData(){
+        if(UserData.currentUser == null){
+            return;
+        }
         //retrieve all cat data
         DbManagerSingleton singleton = DbManagerSingleton.get(getActivity().getApplicationContext());
         GameSessionActivity activity = (GameSessionActivity) getActivity();
         String queryStr = "SELECT * FROM " + CatDbSchema.CatsTable.NAME + " WHERE user_id = ? ";
         String[] whereArgs = new String[] {UserData.currentUser.getId() + ""};
-        System.out.println("CURRRRRRRRRRRR USER ID = " + UserData.currentUser.getId());
         Cursor cursor = new CursorWrapper(singleton.query(queryStr, whereArgs));
         catList = Cat.getCats(cursor);
         UserData.catList = catList;
-
-        System.out.println("CAT AMOUNTTTTTTTTT = " + catList.size());
-        System.out.println("CAT ID = " + UserData.currentCatId);
 
         //set cat name
         if(catNameView != null){
@@ -243,12 +245,13 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
         getActivity().runOnUiThread(new Runnable(){
             @Override
             public void run(){
+                if(catList == null){
+                    return;
+                }
                 Cat cat = catList.get(UserData.currentCatId);
                 boolean updated = cat.updateEnergyMood();
                 if(updated){
                     cat.updateCatToDB(getActivity());
-                    System.out.println("Gauge PPPPPPPPPP = " + ((float)cat.getEnergy() / (float)(cat.getStemina() * 25)));
-                    System.out.println(cat.getEnergy() + " " + (float)(cat.getStemina() * 25));
                 }
                 setGauge((float)cat.getEnergy() / (float)(cat.getStemina() * 25));
                 catMoodView.setText(Cat.moodName(cat.getMood()));
@@ -260,21 +263,5 @@ public class GameSessionFragment extends Fragment implements View.OnClickListene
     @Override
     public void onDestroy(){
         super.onDestroy();
-/*
-        if(gaugeBitmap != null){
-            gaugeBitmap.recycle();
-            gaugeBitmap = null;
-        }
-
-        if(catView != null){
-            catView.destroyDrawingCache();
-            catView = null;
-        }
-*/
-/*
-        System.runFinalization();
-        Runtime.getRuntime().gc();
-        System.gc();*/
-
     }
 }
